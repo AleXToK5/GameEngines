@@ -6,9 +6,9 @@ project(Demo
 file(COPY
     fonts/futura.ttf
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/fonts)
-#file(COPY
-#    config.txt
-#    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY
+    config.json
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(dependencies)
 add_subdirectory(src)

@@ -7,14 +7,14 @@
   "font": "fonts/futura.ttf",
 
   "logos": [
-    "logos/CDLogo.png",
-    "logos/BluRayLogo.png",
+    "logos/CDLogo2.png",
+    "logos/BluRayLogo2.png",
     "logos/DVDLogo.png"
   ],
 
   "velocity": {
-    "x": 200,
-    "y": 150
+    "x": 300,
+    "y": 250
   },
 
   "scale": 0.5,

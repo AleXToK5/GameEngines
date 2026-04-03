@@ -1,12 +1,14 @@
 #include "Window.h"
 
-Window::Window(unsigned int wWidth, unsigned int wHeight)
+Window::Window(ConfigReader& config)
 {
-    _window.create(sf::VideoMode({wWidth, wHeight}), "Demo");
+    _window.create(sf::VideoMode({config.GetWindowWidth(), config.GetWindowHeight()}), "Demo");
 
     auto desktop = sf::VideoMode::getDesktopMode();
+    auto wWidth  = config.GetWindowWidth();
+    auto wHeight = config.GetWindowHeight();
     _window.setPosition({
-        (int)(desktop.size.x / 2 - wWidth / 2),
+        (int)(desktop.size.x / 2 - wWidth  / 2),
         (int)(desktop.size.y / 2 - wHeight / 2)
     });
 
@@ -20,20 +22,17 @@ Window::Window(unsigned int wWidth, unsigned int wHeight)
     ImGui::GetStyle().ScaleAllSizes(1.0f);
     ImGui::GetIO().FontGlobalScale = 2.0f;
 
-    Initialize();
+    Initialize(config);
 }
 
-void Window::Initialize()
+void Window::Initialize(ConfigReader& config)
 {
-    ConfigReader config("config.json");
     auto windowSize = _window.getSize();
 
-    // Загружаем все пути текстур
     std::vector<std::filesystem::path> paths;
     for (int i = 0; i < config.GetLogoCount(); i++)
         paths.push_back(config.GetLogoPath(i));
 
-    // Один логотип со всеми текстурами
     _logo = std::make_shared<Logo>(
         paths,
         sf::Vector2f(100.f, 100.f),
@@ -47,7 +46,9 @@ void Window::Initialize()
         0.f,
         (float)windowSize.y - (float)_text->GetCharacterSize()
     });
-    _savedText = L"Токарев Александр ИУ3-22М";
+
+    // Берём начальный текст из самого объекта, не дублируем строку
+    _savedText = _text->GetString();
 }
 
 void Window::SetPaused(bool paused)
@@ -55,11 +56,11 @@ void Window::SetPaused(bool paused)
     _isPaused = paused;
 
     if (_isPaused) {
-        // Сохраняем текущий текст и показываем "Пауза" по центру
-        _text->SetString(L"\u041f\u0430\u0443\u0437\u0430");  // "Пауза" в unicode
+        // Сохраняем текущее значение текста перед паузой
+        _savedText = _text->GetString();
+        _text->SetString(L"\u041f\u0430\u0443\u0437\u0430");
         _text->CenterIn(_window.getSize());
     } else {
-        // Возвращаем старый текст на прежнее место
         _text->SetString(_savedText);
         auto windowSize = _window.getSize();
         _text->SetPosition({
@@ -97,7 +98,7 @@ void Window::UpdateUserInput()
 
         if (const auto* key = event->getIf<sf::Event::KeyPressed>())
         {
-            if (key->code == sf::Keyboard::Key::Space)
+            if (key->code == sf::Keyboard::Key::Space && !ImGui::GetIO().WantCaptureKeyboard)
                 SetPaused(!_isPaused);
         }
     }

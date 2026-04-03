@@ -21,6 +21,7 @@ public:
     int  GetCharacterSize() const;
     void SetPosition(sf::Vector2f position);
     void SetString(const sf::String& str) { _text.setString(str); }
+    sf::String GetString() const          { return _text.getString(); }
     void CenterIn(const sf::Vector2u& windowSize);  // центрирует текст в окне
 
     void Update(float deltaTime, const sf::Vector2u& windowSize) override {}

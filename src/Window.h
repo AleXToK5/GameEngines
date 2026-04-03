@@ -18,7 +18,7 @@
 class Window {
     sf::RenderWindow _window;
     sf::Clock        _deltaClock;
-    bool             _isRun   = true;
+    bool             _isRun    = true;
     bool             _isPaused = false;
 
     std::shared_ptr<Logo> _logo;
@@ -26,7 +26,7 @@ class Window {
     sf::String            _savedText;
     Gui                   _gui;
 
-    void Initialize();
+    void Initialize(ConfigReader& config);
     void UpdateUserInput();
     void UpdateLogic(float deltaTime);
     void UpdateGui();
@@ -35,7 +35,7 @@ class Window {
     void SetPaused(bool paused);
 
 public:
-    Window(unsigned int wWidth, unsigned int wHeight);
+    Window(ConfigReader& config);
     void Run();
 };
 
