@@ -4,36 +4,31 @@
     "height": 720
   },
 
-  "font": "fonts/futura.ttf",
-
-  "logos": [
-    "logos/CDLogo2.png",
-    "logos/BluRayLogo2.png",
-    "logos/DVDLogo.png"
-  ],
-
-  "velocity": {
-    "x": 300,
-    "y": 250
+  "fonts": {
+    "main": "fonts/futura.ttf"
   },
 
-  "scale": 0.5,
+  "player": {
+    "movement_speed": 300,
+    "shoot_cooldown_ms": 250
+  },
 
-  "colors": [
-    {
-      "r": 255,
-      "g": 255,
-      "b": 255
-    },
-    {
-      "r": 255,
-      "g": 100,
-      "b": 100
-    },
-    {
-      "r": 100,
-      "g": 200,
-      "b": 255
-    }
-  ]
+  "projectile": {
+    "speed": 500
+  },
+
+  "asteroid": {
+    "spawn_time_min_ms": 1000,
+    "spawn_time_max_ms": 3000,
+    "speed_min": 50,
+    "speed_max": 200,
+    "size_min": 20,
+    "size_max": 60,
+    "direction_x_min": -1.0,
+    "direction_x_max": 1.0,
+    "direction_y_min": -1.0,
+    "direction_y_max": 1.0,
+    "circle_points_min": 5,
+    "circle_points_max": 10
+  }
 }

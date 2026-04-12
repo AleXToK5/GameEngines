@@ -1,5 +1,6 @@
 #ifndef DEMO_CONFIGREADER_H
 #define DEMO_CONFIGREADER_H
+
 #include <filesystem>
 #include <vector>
 #include <string>
@@ -8,22 +9,42 @@
 
 class ConfigReader {
     nlohmann::json _config;
+    void ValidateConfig();
+
 public:
+    explicit ConfigReader(const std::string& path);
 
-    ConfigReader(const std::string& path);
+    // Window settings
+    unsigned int GetWindowWidth() const;
+    unsigned int GetWindowHeight() const;
 
-    unsigned int    GetWindowWidth();
-    unsigned int    GetWindowHeight();
+    // Fonts
+    std::string GetMainFontPath() const;
 
-    std::string     GetFontPath();
-    std::string     GetLogoPath(int index);
-    int             GetLogoCount();
+    // Player settings
+    float GetPlayerMovementSpeed() const;
+    int GetPlayerShootCooldownMs() const;
 
-    float           GetVelocityX();
-    float           GetVelocityY();
-    float           GetScale();
-    sf::Color       GetColor(int index);
+    // Projectile settings
+    float GetProjectileSpeed() const;
+
+    // Asteroid settings
+    int GetAsteroidSpawnTimeMinMs() const;
+    int GetAsteroidSpawnTimeMaxMs() const;
+    float GetAsteroidSpeedMin() const;
+    float GetAsteroidSpeedMax() const;
+    float GetAsteroidSizeMin() const;
+    float GetAsteroidSizeMax() const;
+    float GetAsteroidDirectionXMin() const;
+    float GetAsteroidDirectionXMax() const;
+    float GetAsteroidDirectionYMin() const;
+    float GetAsteroidDirectionYMax() const;
+    int GetAsteroidCirclePointsMin() const;
+    int GetAsteroidCirclePointsMax() const;
+
+    // Legacy methods for compatibility
+    std::string GetFontPath();
+
 };
-
 
 #endif //DEMO_CONFIGREADER_H
