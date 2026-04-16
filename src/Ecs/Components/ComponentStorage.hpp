@@ -62,6 +62,8 @@ public:
         _sparse[e] = _count;
         _count++;
 
+        _world.EntityComponentsChanged(e, _id, true);
+
         return _data[_sparse[e]];
     }
 
@@ -74,6 +76,8 @@ public:
         _dense[arrayIndex] = lastEntityId;
         _sparse[lastEntityId] = arrayIndex;
         _sparse[e] = -1;
+
+        _world.EntityComponentsChanged(e, _id, false);
     }
 
     std::span<const T> All() const

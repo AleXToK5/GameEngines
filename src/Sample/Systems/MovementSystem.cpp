@@ -1,35 +1,49 @@
 #include "MovementSystem.h"
+#include <algorithm>
 
-void MovementSystem::Print(int ent)
-{
-    auto& position = _positionComponents.Get(ent);
-    std::cout << ent << " Pos: " << position.X << ", " << position.Y << std::endl;
+MovementSystem::MovementSystem(World &world, ConfigReader &config)
+    : ISystem(world),
+      _config(config),
+      _positions(world.GetStorage<PositionComponent>()),
+      _movements(world.GetStorage<MovementComponent>()),
+      _players(world.GetStorage<PlayerComponent>()),
+      _colliders(world.GetStorage<ColliderComponent>()),
+      _moveables(FilterBuilder(world)
+          .With<PositionComponent>()
+          .With<MovementComponent>()
+          .Build()) {
 }
 
-void MovementSystem::OnInit()
-{
-}
+void MovementSystem::OnUpdate() {
+    float screenWidth = (float) _config.GetWindowWidth();
+    float screenHeight = (float) _config.GetWindowHeight();
 
-void MovementSystem::OnUpdate()
-{
-    for (const auto event : _moveInputEvents)
-    {
-        auto& inputEvent = _eventComponents.Get(event);
+    for (const auto ent: _moveables) {
+        auto &position = _positions.Get(ent);
+        auto &movement = _movements.Get(ent);
 
-        for (const auto ent : _moveables)
-        {
-            auto& position = _positionComponents.Get(ent);
-            auto& movement = _movementComponents.Get(ent);
+        position.X += movement.Speed * movement.Direction.x;
+        position.Y += movement.Speed * movement.Direction.y;
 
-            // Применяем направление из события ввода
-            movement.Direction = inputEvent.Direction;
+        if (_players.Has(ent)) {
+            float radius = 0.f;
+            if (_colliders.Has(ent)) {
+                radius = _colliders.Get(ent).Radius;
+            }
 
-            position.X += movement.Speed * movement.Direction.x;
-            position.Y += movement.Speed * movement.Direction.y;
+            if (position.X - radius < 0.f) {
+                position.X = radius;
+            }
+            if (position.X + radius > screenWidth) {
+                position.X = screenWidth - radius;
+            }
 
-            Print(ent);
+            if (position.Y - radius < 0.f) {
+                position.Y = radius;
+            }
+            if (position.Y + radius > screenHeight) {
+                position.Y = screenHeight - radius;
+            }
         }
-
-        world.RemoveEntity(event);
     }
 }

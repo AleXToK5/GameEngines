@@ -2,31 +2,34 @@
 #define INPUTSYSTEM_H
 
 #include <SFML/Graphics.hpp>
-
+#include <SFML/Window/Keyboard.hpp>
 #include "../../Ecs/Systems/ISystem.h"
+#include "../../Ecs/Filter/Filter.h"
+#include "../../Ecs/Filter/FilterBuilder.h"
 
-#include "../Components/MoveInputEvent.h"
+#include "../Components/PlayerComponent.h"
+#include "../Components/MovementComponent.h"
 
-class InputSystem : public ISystem {
+class InputSystem final : public ISystem {
+    sf::RenderWindow &_window;
 
-    sf::RenderWindow& _window; // так делать не надо точно
-
-    ComponentStorage<MoveInputEvent>& _eventComponents;
+    ComponentStorage<PlayerComponent> &_players;
+    ComponentStorage<MovementComponent> &_movements;
+    Filter _playerFilter;
 
 public:
-    InputSystem(World &world, sf::RenderWindow& window)
+    InputSystem(World &world, sf::RenderWindow &window)
         : ISystem(world),
-        _window(window),
-        _eventComponents(world.GetStorage<MoveInputEvent>())
-    {
-
+          _window(window),
+          _players(world.GetStorage<PlayerComponent>()),
+          _movements(world.GetStorage<MovementComponent>()),
+          _playerFilter(FilterBuilder(world).With<PlayerComponent>().With<MovementComponent>().Build()) {
     }
 
-    void OnInit() override;
+    void OnInit() override {
+    }
 
     void OnUpdate() override;
 };
-
-
 
 #endif //INPUTSYSTEM_H

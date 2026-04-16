@@ -1,41 +1,31 @@
 #ifndef MOVEMENTSYSTEM_H
 #define MOVEMENTSYSTEM_H
 
+#include "../../Ecs/Systems/ISystem.h"
 #include "../../Ecs/Filter/Filter.h"
 #include "../../Ecs/Filter/FilterBuilder.h"
-#include "../../Ecs/Systems/ISystem.h"
+#include "../../ConfigReader.h"
 
-#include "../Components/MoveInputEvent.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/MovementComponent.h"
+#include "../Components/PlayerComponent.h"
+#include "../Components/ColliderComponent.h"
 
 class MovementSystem final : public ISystem {
-    ComponentStorage<PositionComponent>& _positionComponents;
-    ComponentStorage<MovementComponent>& _movementComponents;
-    ComponentStorage<MoveInputEvent>& _eventComponents;
+    ConfigReader &_config;
+    ComponentStorage<PositionComponent> &_positions;
+    ComponentStorage<MovementComponent> &_movements;
+    ComponentStorage<PlayerComponent> &_players;
+    ComponentStorage<ColliderComponent> &_colliders;
 
     Filter _moveables;
-    Filter _moveInputEvents;
-
-    void Print(int ent);
 
 public:
-    MovementSystem(World &world)
-        : ISystem(world),
-          _positionComponents(world.GetStorage<PositionComponent>()),
-          _movementComponents(world.GetStorage<MovementComponent>()),
-          _eventComponents(world.GetStorage<MoveInputEvent>()),
-          _moveables(FilterBuilder(world)
-              .With<PositionComponent>()
-              .With<MovementComponent>()
-              .Build()),
-          _moveInputEvents(FilterBuilder(world)
-              .With<MoveInputEvent>()
-              .Build())
-    {
+    MovementSystem(World &world, ConfigReader &config);
+
+    void OnInit() override {
     }
 
-    void OnInit() override;
     void OnUpdate() override;
 };
 

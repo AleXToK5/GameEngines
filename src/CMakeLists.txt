@@ -14,6 +14,11 @@ set(SOURCES main.cpp
         Sample/Systems/InputSystem.cpp
         Sample/Systems/InputSystem.h
         Sample/Components/MoveInputEvent.h
+        Sample/Systems/PlayerShootSystem.cpp
+        Sample/Systems/AsteroidSpawnerSystem.cpp
+        Sample/Systems/CollisionSystem.cpp
+        Sample/Systems/RestartSystem.cpp
+        Sample/Systems/UiSystem.cpp
 )
 
 add_subdirectory(Ecs)

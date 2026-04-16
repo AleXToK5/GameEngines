@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <imgui-SFML.h> // Обязательно подключаем ImGui-SFML
 
 #include "Ecs/Systems/SystemsManager.h"
 #include "Ecs/World/World.h"
@@ -8,11 +9,16 @@
 #include "Sample/Systems/InputSystem.h"
 #include "Sample/Systems/MovementSystem.h"
 #include "Sample/Systems/RenderSystem.h"
+#include "Sample/Systems/PlayerShootSystem.h"
+#include "Sample/Systems/BoundarySystem.h"
+#include "Sample/Systems/AsteroidSpawnerSystem.h"
+#include "Sample/Systems/CollisionSystem.h"
+#include "Sample/Systems/RestartSystem.h"
+#include "Sample/Systems/UiSystem.h"
 
 #include "ConfigReader.h"
 
 int main() {
-    // Пример использования
     setlocale(LC_ALL, "");
 
     try {
@@ -23,18 +29,49 @@ int main() {
         sf::RenderWindow window(sf::VideoMode({wWidth, wHeight}), "Entity Component System Test");
         window.setFramerateLimit(60);
 
+        if (!ImGui::SFML::Init(window)) {
+            std::cerr << "Failed to initialize ImGui-SFML!" << std::endl;
+            return -1;
+        }
+
         World world;
         SystemsManager systems(world);
-        
-        systems.AddInitializer(std::make_shared<InitSystem>(world));
+
+        systems.AddInitializer(std::make_shared<InitSystem>(world, config));
         systems.AddSystem(std::make_shared<InputSystem>(world, window));
-        systems.AddSystem(std::make_shared<MovementSystem>(world));
+        systems.AddSystem(std::make_shared<MovementSystem>(world, config));
         systems.AddSystem(std::make_shared<RenderSystem>(world, window, config.GetMainFontPath()));
+        systems.AddSystem(std::make_shared<PlayerShootSystem>(world, config));
+        systems.AddSystem(std::make_shared<BoundarySystem>(world, config));
+        systems.AddSystem(std::make_shared<AsteroidSpawnerSystem>(world, config));
+        systems.AddSystem(std::make_shared<CollisionSystem>(world));
+        systems.AddSystem(std::make_shared<RestartSystem>(world, config));
+        systems.AddSystem(std::make_shared<UiSystem>(world));
+
+        sf::Clock deltaClock;
 
         while (window.isOpen()) {
+            while (const std::optional event = window.pollEvent()) {
+                ImGui::SFML::ProcessEvent(window, *event);
+
+                if (event->is<sf::Event::Closed>()) {
+                    window.close();
+                }
+            }
+
+            ImGui::SFML::Update(window, deltaClock.restart());
+
+            window.clear(sf::Color::Black);
+
             systems.Update();
+
+            ImGui::SFML::Render(window);
+
+            window.display();
         }
-    } catch (const std::exception& e) {
+
+        ImGui::SFML::Shutdown();
+    } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
