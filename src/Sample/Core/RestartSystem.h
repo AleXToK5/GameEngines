@@ -7,14 +7,14 @@
 #include "../../ConfigReader.h"
 #include <SFML/Window/Keyboard.hpp>
 
-#include "../Components/GameStateComponent.h"
-#include "../Components/AsteroidComponent.h"
-#include "../Components/ProjectileComponent.h"
-#include "../Components/PlayerComponent.h"
-#include "../Components/PositionComponent.h"
-#include "../Components/MovementComponent.h"
-#include "../Components/RenderComponent.h"
-#include "../Components/ColliderComponent.h"
+#include "GameStateComponent.h"
+#include "../Gameplay/Enemies/AsteroidComponent.h"
+#include "../Gameplay/Weapons/ProjectileComponent.h"
+#include "../Gameplay/Player/PlayerComponent.h"
+#include "../Physics/PositionComponent.h"
+#include "../Physics/MovementComponent.h"
+#include "../Physics/ColliderComponent.h"
+#include "../Graphics/RenderComponent.h"
 
 class RestartSystem final : public ISystem {
     ConfigReader& _config;

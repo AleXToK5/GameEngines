@@ -5,7 +5,7 @@
 #include "../../Ecs/Filter/Filter.h"
 #include "../../Ecs/Filter/FilterBuilder.h"
 #include "../../ConfigReader.h"
-#include "../Components/PositionComponent.h"
+#include "PositionComponent.h"
 #include <vector>
 
 class BoundarySystem final : public ISystem {

@@ -7,8 +7,8 @@
 #include "../../Ecs/World/World.h"
 #include "imgui.h"
 
-#include "../Components/PositionComponent.h"
-#include "../Components/SpawnerConfigComponent.h"
+#include "../Physics/PositionComponent.h"
+#include "../Core/SpawnerConfigComponent.h"
 
 class UiSystem final : public ISystem {
     ComponentStorage<PositionComponent>& _positions;

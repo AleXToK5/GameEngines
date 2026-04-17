@@ -2,14 +2,14 @@
 #define ASTEROIDSPAWNERSYSTEM_H
 
 #include <random>
-#include "../../Ecs/Systems/ISystem.h"
-#include "../../ConfigReader.h"
+#include "../../../Ecs/Systems/ISystem.h"
+#include "../../../ConfigReader.h"
 
-#include "../Components/PositionComponent.h"
-#include "../Components/MovementComponent.h"
-#include "../Components/RenderComponent.h"
-#include "../Components/ColliderComponent.h"
-#include "../Components/AsteroidComponent.h"
+#include "../../Physics/PositionComponent.h"
+#include "../../Physics/MovementComponent.h"
+#include "../../Graphics/RenderComponent.h"
+#include "../../Physics/ColliderComponent.h"
+#include "AsteroidComponent.h"
 
 class AsteroidSpawnerSystem final : public ISystem {
     ConfigReader &_config;

@@ -2,23 +2,23 @@ set(TARGET_NAME main)
 set(SOURCES main.cpp
         ConfigReader.cpp
         ConfigReader.h
-        Sample/Systems/MovementSystem.cpp
-        Sample/Systems/MovementSystem.h
-        Sample/Systems/InitSystem.cpp
-        Sample/Systems/InitSystem.h
-        Sample/Systems/RenderSystem.cpp
-        Sample/Systems/RenderSystem.h
-        Sample/Components/PositionComponent.h
-        Sample/Components/MovementComponent.h
-        Sample/Components/RenderComponent.h
-        Sample/Systems/InputSystem.cpp
-        Sample/Systems/InputSystem.h
-        Sample/Components/MoveInputEvent.h
-        Sample/Systems/PlayerShootSystem.cpp
-        Sample/Systems/AsteroidSpawnerSystem.cpp
-        Sample/Systems/CollisionSystem.cpp
-        Sample/Systems/RestartSystem.cpp
-        Sample/Systems/UiSystem.cpp
+        Sample/Physics/MovementSystem.cpp
+        Sample/Physics/MovementSystem.h
+        Sample/Core/InitSystem.cpp
+        Sample/Core/InitSystem.h
+        Sample/Graphics/RenderSystem.cpp
+        Sample/Graphics/RenderSystem.h
+        Sample/Physics/PositionComponent.h
+        Sample/Physics/MovementComponent.h
+        Sample/Graphics/RenderComponent.h
+        Sample/Input/InputSystem.cpp
+        Sample/Input/InputSystem.h
+        Sample/Input/MoveInputEvent.h
+        Sample/Gameplay/Player/PlayerShootSystem.cpp
+        Sample/Gameplay/Enemies/AsteroidSpawnerSystem.cpp
+        Sample/Physics/CollisionSystem.cpp
+        Sample/Core/RestartSystem.cpp
+        Sample/UI/UiSystem.cpp
 )
 
 add_subdirectory(Ecs)

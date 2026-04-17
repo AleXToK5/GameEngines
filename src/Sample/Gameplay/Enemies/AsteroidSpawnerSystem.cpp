@@ -1,5 +1,5 @@
 #include "AsteroidSpawnerSystem.h"
-#include "../Components/SpawnerConfigComponent.h"
+#include "../../Core/SpawnerConfigComponent.h"
 
 AsteroidSpawnerSystem::AsteroidSpawnerSystem(World &world, ConfigReader &config)
     : ISystem(world),

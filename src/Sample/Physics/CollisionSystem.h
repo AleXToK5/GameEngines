@@ -5,12 +5,12 @@
 #include "../../Ecs/Filter/Filter.h"
 #include "../../Ecs/Filter/FilterBuilder.h"
 
-#include "../Components/PositionComponent.h"
-#include "../Components/ColliderComponent.h"
-#include "../Components/AsteroidComponent.h"
-#include "../Components/ProjectileComponent.h"
-#include "../Components/PlayerComponent.h"
-#include "../Components/GameStateComponent.h"
+#include "PositionComponent.h"
+#include "ColliderComponent.h"
+#include "../Gameplay/Enemies/AsteroidComponent.h"
+#include "../Gameplay/Weapons/ProjectileComponent.h"
+#include "../Gameplay/Player/PlayerComponent.h"
+#include "../Core/GameStateComponent.h"
 
 #include <unordered_set>
 
