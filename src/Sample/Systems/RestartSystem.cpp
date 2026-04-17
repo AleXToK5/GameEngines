@@ -48,7 +48,7 @@ void RestartSystem::OnUpdate() {
         _positions.Add(player, PositionComponent{startX, startY});
         _movements.Add(player, MovementComponent{_config.GetPlayerMovementSpeed() / 60.0f, sf::Vector2f(0.f, 0.f)});
         _renders.Add(player, RenderComponent{ShapeType::Polygon, 20.f, 3, {0.f, 0.f}, sf::Color::Green});
-        _colliders.Add(player, ColliderComponent{ColliderType::Circle, 20.f, {0.f, 0.f}});
+        _colliders.Add(player, ColliderComponent{ColliderType::Circle, 20.f, {0.f, 0.f}, Player, Asteroid});
 
         int cooldown = (_config.GetPlayerShootCooldownMs() * 60) / 1000;
         _players.Add(player, PlayerComponent{0, cooldown});

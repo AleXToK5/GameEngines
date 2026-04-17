@@ -31,8 +31,7 @@ void InitSystem::OnInit() {
 
     // Треугольник
     renderStorage.Add(player, RenderComponent{ShapeType::Polygon, 20.f, 3, {0.f, 0.f}, sf::Color::Green});
-    colliderStorage.Add(player, ColliderComponent{ColliderType::Circle, 20.f, {0.f, 0.f}});
-
+    colliderStorage.Add(player, ColliderComponent{ColliderType::Circle, 20.f, {0.f, 0.f}, Player, Asteroid});
     gameStateStorage.Add(gameStateEntity, GameStateComponent{0, false});
 
     // Переводим миллисекунды кулдауна в кадры (при 60 FPS: 1000мс = 60 кадров)

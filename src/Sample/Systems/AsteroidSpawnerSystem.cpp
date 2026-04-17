@@ -72,7 +72,9 @@ void AsteroidSpawnerSystem::OnUpdate() {
 
         int points = GetRandomInt(_config.GetAsteroidCirclePointsMin(), _config.GetAsteroidCirclePointsMax());
         _renders.Add(asteroid, RenderComponent{ShapeType::Polygon, size, points, {0.f, 0.f}, sf::Color::Red});
-        _colliders.Add(asteroid, ColliderComponent{ColliderType::Circle, size, {0.f, 0.f}});
+        _colliders.Add(asteroid, ColliderComponent{
+                           ColliderType::Circle, size, {0.f, 0.f}, Asteroid, static_cast<uint16_t>(Player | Projectile)
+                       });
         _asteroids.Add(asteroid, AsteroidComponent{});
 
         if (liveCfg) {

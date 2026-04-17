@@ -40,8 +40,8 @@ void PlayerShootSystem::OnUpdate() {
             _movements.Add(proj, MovementComponent{projSpeed, sf::Vector2f(0.f, -1.f)});
 
             _renders.Add(proj, RenderComponent{ShapeType::Rectangle, 0.f, 0, {10.f, 20.f}, sf::Color::Yellow});
-            _colliders.Add(proj, ColliderComponent{ColliderType::AABB, 0.f, {10.f, 20.f}});
-            _projectiles.Add(proj, ProjectileComponent{}); // Вешаем тег снаряда
+            _colliders.Add(proj, ColliderComponent{ColliderType::AABB, 0.f, {10.f, 20.f}, Projectile, Asteroid});
+            _projectiles.Add(proj, ProjectileComponent{});
         }
     }
 }

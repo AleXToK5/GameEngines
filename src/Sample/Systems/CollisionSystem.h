@@ -15,19 +15,26 @@
 #include <unordered_set>
 
 class CollisionSystem final : public ISystem {
-    ComponentStorage<PositionComponent>& _positions;
-    ComponentStorage<ColliderComponent>& _colliders;
-    ComponentStorage<GameStateComponent>& _gameStates;
+    ComponentStorage<PositionComponent> &_positions;
+    ComponentStorage<ColliderComponent> &_colliders;
+    ComponentStorage<GameStateComponent> &_gameStates;
 
-    Filter _projectilesFilter;
-    Filter _asteroidsFilter;
-    Filter _playersFilter;
+    ComponentStorage<PlayerComponent> &_players;
+    ComponentStorage<ProjectileComponent> &_projectiles;
+    ComponentStorage<AsteroidComponent> &_asteroids;
+
+    Filter _collidableFilter;
     Filter _gameStateFilter;
+
+    bool CheckIntersection(const PositionComponent &p1, const ColliderComponent &c1,
+                           const PositionComponent &p2, const ColliderComponent &c2);
 
 public:
     CollisionSystem(World &world);
 
-    void OnInit() override;
+    void OnInit() override {
+    }
+
     void OnUpdate() override;
 };
 

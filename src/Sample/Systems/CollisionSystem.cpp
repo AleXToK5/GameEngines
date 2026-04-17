@@ -1,20 +1,50 @@
 #include "CollisionSystem.h"
+#include <vector>
 
 CollisionSystem::CollisionSystem(World &world)
     : ISystem(world),
       _positions(world.GetStorage<PositionComponent>()),
       _colliders(world.GetStorage<ColliderComponent>()),
       _gameStates(world.GetStorage<GameStateComponent>()),
-      _projectilesFilter(
-          FilterBuilder(world).With<PositionComponent>().With<ColliderComponent>().With<ProjectileComponent>().Build()),
-      _asteroidsFilter(
-          FilterBuilder(world).With<PositionComponent>().With<ColliderComponent>().With<AsteroidComponent>().Build()),
-      _playersFilter(
-          FilterBuilder(world).With<PositionComponent>().With<ColliderComponent>().With<PlayerComponent>().Build()),
+      _players(world.GetStorage<PlayerComponent>()),
+      _projectiles(world.GetStorage<ProjectileComponent>()),
+      _asteroids(world.GetStorage<AsteroidComponent>()),
+      _collidableFilter(FilterBuilder(world).With<PositionComponent>().With<ColliderComponent>().Build()),
       _gameStateFilter(FilterBuilder(world).With<GameStateComponent>().Build()) {
 }
 
-void CollisionSystem::OnInit() {
+bool CollisionSystem::CheckIntersection(const PositionComponent &p1, const ColliderComponent &c1,
+                                        const PositionComponent &p2, const ColliderComponent &c2) {
+    // Circle - Circle
+    if (c1.Type == ColliderType::Circle && c2.Type == ColliderType::Circle) {
+        float dx = p1.X - p2.X;
+        float dy = p1.Y - p2.Y;
+        float distSq = dx * dx + dy * dy;
+        float radSum = c1.Radius + c2.Radius;
+        return distSq < (radSum * radSum);
+    }
+
+    // Сircle - AABB
+    const PositionComponent *circPos = (c1.Type == ColliderType::Circle) ? &p1 : &p2;
+    const ColliderComponent *circCol = (c1.Type == ColliderType::Circle) ? &c1 : &c2;
+    const PositionComponent *aabbPos = (c1.Type == ColliderType::AABB) ? &p1 : &p2;
+    const ColliderComponent *aabbCol = (c1.Type == ColliderType::AABB) ? &c1 : &c2;
+
+    float halfW = aabbCol->Size.x / 2.0f;
+    float halfH = aabbCol->Size.y / 2.0f;
+
+    float minX = aabbPos->X - halfW;
+    float maxX = aabbPos->X + halfW;
+    float minY = aabbPos->Y - halfH;
+    float maxY = aabbPos->Y + halfH;
+
+    float closestX = std::max(minX, std::min(circPos->X, maxX));
+    float closestY = std::max(minY, std::min(circPos->Y, maxY));
+
+    float dx = circPos->X - closestX;
+    float dy = circPos->Y - closestY;
+
+    return (dx * dx + dy * dy) < (circCol->Radius * circCol->Radius);
 }
 
 void CollisionSystem::OnUpdate() {
@@ -24,65 +54,47 @@ void CollisionSystem::OnUpdate() {
         break;
     }
 
-    std::unordered_set<int> entitiesToRemove;
+    if (gameState && gameState->IsGameOver) return;
 
-    for (const int proj: _projectilesFilter) {
-        if (entitiesToRemove.count(proj)) continue;
-        auto &projPos = _positions.Get(proj);
-        auto &projCol = _colliders.Get(proj);
-
-        for (const int ast: _asteroidsFilter) {
-            if (entitiesToRemove.count(ast)) continue;
-            auto &astPos = _positions.Get(ast);
-            auto &astCol = _colliders.Get(ast);
-
-            float halfW = projCol.Size.x / 2.0f;
-            float halfH = projCol.Size.y / 2.0f;
-
-            // Находим границы прямоугольника (пули)
-            float minX = projPos.X - halfW;
-            float maxX = projPos.X + halfW;
-            float minY = projPos.Y - halfH;
-            float maxY = projPos.Y + halfH;
-
-            // Ищем ближайшую точку на прямоугольнике к центру круга (астероида)
-            float closestX = std::max(minX, std::min(astPos.X, maxX));
-            float closestY = std::max(minY, std::min(astPos.Y, maxY));
-
-            // Расстояние от ближайшей точки до центра круга
-            float dx = astPos.X - closestX;
-            float dy = astPos.Y - closestY;
-
-            // Если квадрат расстояния меньше квадрата радиуса — столкновение
-            if ((dx * dx + dy * dy) < (astCol.Radius * astCol.Radius)) {
-                entitiesToRemove.insert(proj);
-                entitiesToRemove.insert(ast);
-                if (gameState) gameState->Score++;
-                break;
-            }
-        }
+    std::vector<int> collidables;
+    for (int ent: _collidableFilter) {
+        collidables.push_back(ent);
     }
 
-    if (gameState && !gameState->IsGameOver) {
-        for (const int player: _playersFilter) {
-            if (entitiesToRemove.count(player)) continue;
-            auto &playerPos = _positions.Get(player);
-            auto &playerCol = _colliders.Get(player);
+    std::unordered_set<int> entitiesToRemove;
 
-            for (const int ast: _asteroidsFilter) {
-                if (entitiesToRemove.count(ast)) continue;
-                auto &astPos = _positions.Get(ast);
-                auto &astCol = _colliders.Get(ast);
+    for (size_t i = 0; i < collidables.size(); ++i) {
+        for (size_t j = i + 1; j < collidables.size(); ++j) {
+            int e1 = collidables[i];
+            int e2 = collidables[j];
 
-                float dx = playerPos.X - astPos.X;
-                float dy = playerPos.Y - astPos.Y;
-                float distanceSq = (dx * dx) + (dy * dy);
-                float radiusSumSq = (playerCol.Radius + astCol.Radius) * (playerCol.Radius + astCol.Radius);
+            if (entitiesToRemove.count(e1) || entitiesToRemove.count(e2)) continue;
 
-                if (distanceSq < radiusSumSq) {
-                    entitiesToRemove.insert(player);
-                    gameState->IsGameOver = true;
-                    break;
+            auto &c1 = _colliders.Get(e1);
+            auto &c2 = _colliders.Get(e2);
+
+            if (!(c1.Layer & c2.Mask) || !(c2.Layer & c1.Mask)) {
+                continue;
+            }
+
+            auto &p1 = _positions.Get(e1);
+            auto &p2 = _positions.Get(e2);
+
+            if (CheckIntersection(p1, c1, p2, c2)) {
+                bool isE1Player = _players.Has(e1);
+                bool isE2Player = _players.Has(e2);
+                bool isE1Ast = _asteroids.Has(e1);
+                bool isE2Ast = _asteroids.Has(e2);
+                bool isE1Proj = _projectiles.Has(e1);
+                bool isE2Proj = _projectiles.Has(e2);
+
+                if ((isE1Player && isE2Ast) || (isE2Player && isE1Ast)) {
+                    entitiesToRemove.insert(isE1Player ? e1 : e2);
+                    if (gameState) gameState->IsGameOver = true;
+                } else if ((isE1Proj && isE2Ast) || (isE2Proj && isE1Ast)) {
+                    entitiesToRemove.insert(e1);
+                    entitiesToRemove.insert(e2);
+                    if (gameState) gameState->Score++;
                 }
             }
         }
