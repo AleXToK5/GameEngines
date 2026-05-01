@@ -19,7 +19,35 @@ set(SOURCES main.cpp
         Sample/Physics/CollisionSystem.cpp
         Sample/Core/RestartSystem.cpp
         Sample/UI/UiSystem.cpp
+        GameEngine/GameEngine.cpp
+        GameEngine/GameEngine.h
+        GameEngine/GameEngineConfiguration.h
+        GameEngine/Scene.cpp
+        GameEngine/Scene.h
+        GameEngine/Assets/Animation.cpp
+        GameEngine/Assets/Animation.h
+        GameEngine/Assets/AssetManager.cpp
+        GameEngine/Assets/AssetManager.h
+        GameEngine/Input/InputAction.cpp
+        GameEngine/Input/InputAction.h
+        GameEngine/Input/InputManager.cpp
+        GameEngine/Input/InputManager.h
+        Sample/Scenes/MenuScene.h
+        Sample/Scenes/GameScene.h
+        Sample/Camera/CameraComponent.h
+        Sample/Camera/DefaultCameraTag.h
+        Sample/Camera/FollowXCameraTag.h
+        Sample/Camera/DefaultCameraSystem.h
+        Sample/Camera/FollowXCameraSystem.h
+        Sample/Graphics/SpriteRenderSystem.h
+        Sample/Graphics/SpriteComponent.h
+        Sample/Level/LevelInitializer.h
+        Sample/Gameplay/PlayerTag.h
+        Sample/Physics/TransformComponent.h
 )
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets
+        DESTINATION ${CMAKE_SOURCE_DIR})
 
 add_subdirectory(Ecs)
 

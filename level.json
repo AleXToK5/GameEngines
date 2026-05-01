@@ -1,0 +1,19 @@
+[
+  { "name": "Player",  "x": 1, "y": 6 },
+  { "name": "Tile",    "x": 0, "y": 7 },
+  { "name": "Tile",    "x": 1, "y": 7 },
+  { "name": "Tile",    "x": 2, "y": 7 },
+  { "name": "Tile",    "x": 3, "y": 7 },
+  { "name": "Tile",    "x": 4, "y": 7 },
+  { "name": "Tile",    "x": 5, "y": 7 },
+  { "name": "Tile",    "x": 6, "y": 7 },
+  { "name": "Tile",    "x": 7, "y": 7 },
+  { "name": "Tile",    "x": 8, "y": 7 },
+  { "name": "Tile",    "x": 9, "y": 7 },
+  { "name": "Tile",    "x": 10, "y": 7 },
+  { "name": "BigHill", "x": 0, "y": 5 },
+  { "name": "Brick",   "x": 3, "y": 4 },
+  { "name": "Brick",   "x": 4, "y": 4 },
+  { "name": "Brick",   "x": 5, "y": 4 },
+  { "name": "Finish",  "x": 10, "y": 3 }
+]
