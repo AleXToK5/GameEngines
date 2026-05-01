@@ -47,7 +47,7 @@ set(SOURCES main.cpp
 )
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets
-        DESTINATION ${CMAKE_SOURCE_DIR})
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(Ecs)
 
