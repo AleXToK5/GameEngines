@@ -3,15 +3,11 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
-void GameEngine::Render()
-{
+void GameEngine::Render() {
     // Очистка и фон выполняются в Scene::Render()
-    if (_scenes.count(_currentScene))
-    {
+    if (_scenes.count(_currentScene)) {
         _scenes[_currentScene]->Render(_window);
-    }
-    else
-    {
+    } else {
         _window.clear(sf::Color::Black);
     }
 
@@ -19,9 +15,8 @@ void GameEngine::Render()
     _window.display();
 }
 
-GameEngine::GameEngine(const GameEngineConfiguration& config)
-    : _config(config), _isRunning(false), _currentScene(0)
-{
+GameEngine::GameEngine(const GameEngineConfiguration &config)
+    : _config(config), _isRunning(false), _currentScene(0) {
     _window.create(
         sf::VideoMode({_config.width, _config.height}),
         "Game Engine");
@@ -36,17 +31,14 @@ GameEngine::GameEngine(const GameEngineConfiguration& config)
     _assetManager.LoadFromFile(_config.assetsFile);
 }
 
-void GameEngine::Initialize()
-{
+void GameEngine::Initialize() {
     _isRunning = true;
 }
 
-void GameEngine::Run()
-{
+void GameEngine::Run() {
     Initialize();
 
-    while (_window.isOpen() && _isRunning)
-    {
+    while (_window.isOpen() && _isRunning) {
         float deltaTime = _deltaClock.restart().asSeconds();
 
         _inputManager->ProcessInput(_currentScene);
@@ -55,8 +47,7 @@ void GameEngine::Run()
             _scenes[_currentScene]->Update(deltaTime);
 
         // Применяем отложенную смену сцены ПОСЛЕ Update
-        if (_pendingSceneChange)
-        {
+        if (_pendingSceneChange) {
             _pendingSceneChange();
             _pendingSceneChange = nullptr;
         }
@@ -68,8 +59,7 @@ void GameEngine::Run()
     Quit();
 }
 
-void GameEngine::Quit()
-{
+void GameEngine::Quit() {
     ImGui::SFML::Shutdown();
     _window.close();
     _isRunning = false;

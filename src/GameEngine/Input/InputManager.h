@@ -10,27 +10,31 @@ enum MouseMove { Move };
 
 class GameEngine;
 
-class InputManager
-{
-    sf::RenderWindow& _window;
-    GameEngine& _gameEngine;
+class InputManager {
+    sf::RenderWindow &_window;
+    GameEngine &_gameEngine;
 
-    std::unordered_map<size_t, std::unordered_map<sf::Keyboard::Key, std::shared_ptr<InputAction>>> _actionKeyMaps;
-    std::unordered_map<size_t, std::unordered_map<sf::Mouse::Button, std::shared_ptr<InputAction>>> _actionMouseBtnMaps;
-    std::unordered_map<size_t, std::unordered_map<sf::Mouse::Wheel, std::shared_ptr<InputAction>>> _actionMouseWheelMaps;
-    std::unordered_map<size_t, std::unordered_map<MouseMove, std::shared_ptr<InputAction>>> _actionMouseMoveMaps;
+    std::unordered_map<size_t, std::unordered_map<sf::Keyboard::Key, std::shared_ptr<InputAction> > > _actionKeyMaps;
+    std::unordered_map<size_t, std::unordered_map<sf::Mouse::Button, std::shared_ptr<InputAction> > >
+    _actionMouseBtnMaps;
+    std::unordered_map<size_t, std::unordered_map<sf::Mouse::Wheel, std::shared_ptr<InputAction> > >
+    _actionMouseWheelMaps;
+    std::unordered_map<size_t, std::unordered_map<MouseMove, std::shared_ptr<InputAction> > > _actionMouseMoveMaps;
 
 public:
-    InputManager(sf::RenderWindow& window, GameEngine& gameEngine);
+    InputManager(sf::RenderWindow &window, GameEngine &gameEngine);
 
     void RegisterInput(size_t scene,
-        sf::Keyboard::Key key, std::shared_ptr<InputAction> action);
+                       sf::Keyboard::Key key, std::shared_ptr<InputAction> action);
+
     void RegisterInput(size_t scene,
-        sf::Mouse::Button btn, std::shared_ptr<InputAction> action);
+                       sf::Mouse::Button btn, std::shared_ptr<InputAction> action);
+
     void RegisterInput(size_t scene,
-        sf::Mouse::Wheel wheel, std::shared_ptr<InputAction> action);
+                       sf::Mouse::Wheel wheel, std::shared_ptr<InputAction> action);
+
     void RegisterInput(size_t scene,
-        MouseMove mv, std::shared_ptr<InputAction> action);
+                       MouseMove mv, std::shared_ptr<InputAction> action);
 
     bool ProcessInput(size_t scene);
 };

@@ -2,6 +2,7 @@
 #define PLAYERTAG_H
 
 // Тег-компонент для идентификации сущности игрока
-struct PlayerTag {};
+struct PlayerTag {
+};
 
 #endif //PLAYERTAG_H

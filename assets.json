@@ -2,55 +2,55 @@
   "Textures": [
     {
       "name": "TexRun",
-      "path": "Assets/Animations/MegaRun.png"
+      "path": "src/Assets/Animations/MegaRun.png"
     },
     {
       "name": "MegaIdle",
-      "path": "Assets/Textures/MegaIdle.png"
+      "path": "src/Assets/Textures/MegaIdle.png"
     },
     {
       "name": "Tile",
-      "path": "Assets/Textures/tile.png"
+      "path": "src/Assets/Textures/tile.png"
     },
     {
       "name": "Tile1",
-      "path": "Assets/Textures/tile1.png"
+      "path": "src/Assets/Textures/tile1.png"
     },
     {
       "name": "Brick Tile",
-      "path": "Assets/Textures/brick_tile.png"
+      "path": "src/Assets/Textures/brick_tile.png"
     },
     {
       "name": "Question Tile",
-      "path": "Assets/Textures/question_tile.png"
+      "path": "src/Assets/Textures/question_tile.png"
     },
     {
       "name": "Question Inactive Tile",
-      "path": "Assets/Textures/question_inactive_tile.png"
+      "path": "src/Assets/Textures/question_inactive_tile.png"
     },
     {
       "name": "Pipe Up R",
-      "path": "Assets/Textures/pipeUpR.png"
+      "path": "src/Assets/Textures/pipeUpR.png"
     },
     {
       "name": "Pipe L",
-      "path": "Assets/Textures/pipeL.png"
+      "path": "src/Assets/Textures/pipeL.png"
     },
     {
       "name": "Pipe R",
-      "path": "Assets/Textures/pipeR.png"
+      "path": "src/Assets/Textures/pipeR.png"
     },
     {
       "name": "Pipe Up L",
-      "path": "Assets/Textures/pipeUpL.png"
+      "path": "src/Assets/Textures/pipeUpL.png"
     },
     {
       "name": "Finish",
-      "path": "Assets/Textures/finish.png"
+      "path": "src/Assets/Textures/finish.png"
     },
     {
       "name": "BigHill",
-      "path": "Assets/Textures/hillBig.png"
+      "path": "src/Assets/Textures/hillBig.png"
     }
   ],
   "Animations": [
@@ -64,7 +64,7 @@
   "Fonts": [
     {
       "name": "BaseFont",
-      "path": "Assets/Fonts/futura.ttf"
+      "path": "src/Assets/Fonts/futura.ttf"
     }
   ]
 }

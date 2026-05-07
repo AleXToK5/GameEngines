@@ -16,29 +16,33 @@
 class GameEngine;
 
 class Scene {
-
-    std::shared_ptr<InputAction> RegisterAction(const std::string& name);
+    std::shared_ptr<InputAction> RegisterAction(const std::string &name);
 
 protected:
-    GameEngine& gameEngine;
-    std::unordered_map<std::string, std::shared_ptr<InputAction>> actionMap;
+    GameEngine &gameEngine;
+    std::unordered_map<std::string, std::shared_ptr<InputAction> > actionMap;
 
     World world;
     SystemsManager systemsManager;
 
-    void RegisterAction(sf::Keyboard::Key key, const std::string& name);
-    void RegisterAction(sf::Mouse::Button btn, const std::string& name);
-    void RegisterAction(sf::Mouse::Wheel wheel, const std::string& name);
-    void RegisterAction(MouseMove mv, const std::string& name);
+    void RegisterAction(sf::Keyboard::Key key, const std::string &name);
+
+    void RegisterAction(sf::Mouse::Button btn, const std::string &name);
+
+    void RegisterAction(sf::Mouse::Wheel wheel, const std::string &name);
+
+    void RegisterAction(MouseMove mv, const std::string &name);
 
 public:
     virtual ~Scene() = default;
 
-    Scene(GameEngine& gameEngine);
+    Scene(GameEngine &gameEngine);
 
     virtual void Init() = 0;
+
     virtual void Update(float delta) = 0;
-    virtual void Render(sf::RenderWindow& window) = 0;
+
+    virtual void Render(sf::RenderWindow &window) = 0;
 };
 
 #endif //SCENE_H

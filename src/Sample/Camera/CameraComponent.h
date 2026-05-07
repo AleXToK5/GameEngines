@@ -3,8 +3,7 @@
 
 #include <SFML/Graphics/View.hpp>
 
-struct CameraComponent
-{
+struct CameraComponent {
     sf::View View;
 };
 

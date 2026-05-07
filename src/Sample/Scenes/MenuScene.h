@@ -6,8 +6,7 @@
 #include "../../Sample/Camera/DefaultCameraSystem.h"
 #include "GameScene.h"
 
-class MenuScene final : public Scene
-{
+class MenuScene final : public Scene {
     sf::Text _titleText;
     sf::Text _playText;
     sf::Text _exitText;
@@ -19,17 +18,16 @@ class MenuScene final : public Scene
     std::shared_ptr<InputAction> _mouseMove;
 
 public:
-    explicit MenuScene(GameEngine& engine)
+    explicit MenuScene(GameEngine &engine)
         : Scene(engine),
-            _titleText(engine.Assets().GetFont("BaseFont"), ""),
-            _playText(engine.Assets().GetFont("BaseFont"), ""),
-            _exitText(engine.Assets().GetFont("BaseFont"), "")
-    {}
+          _titleText(engine.Assets().GetFont("BaseFont"), ""),
+          _playText(engine.Assets().GetFont("BaseFont"), ""),
+          _exitText(engine.Assets().GetFont("BaseFont"), "") {
+    }
 
-    void Init() override
-    {
+    void Init() override {
         // Загружаем шрифт
-        const sf::Font& font = gameEngine.Assets().GetFont("BaseFont");
+        const sf::Font &font = gameEngine.Assets().GetFont("BaseFont");
 
         _titleText = sf::Text(font, "SUPER MARIO", 72);
         _titleText.setFillColor(sf::Color::Yellow);
@@ -54,26 +52,24 @@ public:
         systemsManager.Initialize();
     }
 
-    void Update(float delta) override
-    {
-        auto& win = gameEngine.Window();
+    void Update(float delta) override {
+        auto &win = gameEngine.Window();
         float cx = win.getSize().x / 2.f;
         float cy = win.getSize().y / 2.f;
 
         // Позиции кнопок
-        auto centerText = [](sf::Text& t, float x, float y) {
+        auto centerText = [](sf::Text &t, float x, float y) {
             sf::FloatRect b = t.getLocalBounds();
             t.setOrigin({b.position.x + b.size.x / 2.f, b.position.y + b.size.y / 2.f});
             t.setPosition({x, y});
         };
 
         centerText(_titleText, cx, cy - 150.f);
-        centerText(_playText,  cx, cy);
-        centerText(_exitText,  cx, cy + 100.f);
+        centerText(_playText, cx, cy);
+        centerText(_exitText, cx, cy + 100.f);
 
         // Hover по мыши
-        if (_mouseMove->Type() == ActionType::Start)
-        {
+        if (_mouseMove->Type() == ActionType::Start) {
             sf::Vector2f mp = static_cast<sf::Vector2f>(_mouseMove->Value2());
             _playHovered = _playText.getGlobalBounds().contains(mp);
             _exitHovered = _exitText.getGlobalBounds().contains(mp);
@@ -82,17 +78,13 @@ public:
         }
 
         // Клик
-        if (_mouseClick->Type() == ActionType::End)
-        {
+        if (_mouseClick->Type() == ActionType::End) {
             sf::Vector2f mp = static_cast<sf::Vector2f>(_mouseMove->Value2());
-            if (_playText.getGlobalBounds().contains(mp))
-            {
+            if (_playText.getGlobalBounds().contains(mp)) {
                 gameEngine.RequestSceneChange([this]() {
                     gameEngine.LoadScene<GameScene>(gameEngine);
                 });
-            }
-            else if (_exitText.getGlobalBounds().contains(mp))
-            {
+            } else if (_exitText.getGlobalBounds().contains(mp)) {
                 gameEngine.Quit();
             }
         }
@@ -100,8 +92,7 @@ public:
         systemsManager.Update();
     }
 
-    void Render(sf::RenderWindow& window) override
-    {
+    void Render(sf::RenderWindow &window) override {
         window.clear(sf::Color::Black);
         window.draw(_titleText);
         window.draw(_playText);

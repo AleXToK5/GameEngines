@@ -3,8 +3,7 @@
 
 #include <string>
 
-struct SpriteComponent
-{
+struct SpriteComponent {
     std::string TextureName;
 };
 

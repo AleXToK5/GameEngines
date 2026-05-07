@@ -9,16 +9,15 @@
 #include "../Physics/TransformComponent.h"
 #include "SpriteComponent.h"
 
-class SpriteRenderSystem final : public ISystem
-{
-    sf::RenderWindow& _window;
-    const AssetManager& _assets;
-    ComponentStorage<TransformComponent>& _transforms;
-    ComponentStorage<SpriteComponent>& _sprites;
+class SpriteRenderSystem final : public ISystem {
+    sf::RenderWindow &_window;
+    const AssetManager &_assets;
+    ComponentStorage<TransformComponent> &_transforms;
+    ComponentStorage<SpriteComponent> &_sprites;
     Filter _filter;
 
 public:
-    SpriteRenderSystem(World& world, sf::RenderWindow& window, const AssetManager& assets)
+    SpriteRenderSystem(World &world, sf::RenderWindow &window, const AssetManager &assets)
         : ISystem(world),
           _window(window),
           _assets(assets),
@@ -27,19 +26,18 @@ public:
           _filter(FilterBuilder(world)
               .With<TransformComponent>()
               .With<SpriteComponent>()
-              .Build())
-    {}
+              .Build()) {
+    }
 
-    void OnInit() override {}
+    void OnInit() override {
+    }
 
-    void OnUpdate() override
-    {
-        for (int e : _filter)
-        {
-            auto& t = _transforms.Get(e);
-            auto& s = _sprites.Get(e);
+    void OnUpdate() override {
+        for (int e: _filter) {
+            auto &t = _transforms.Get(e);
+            auto &s = _sprites.Get(e);
 
-            const sf::Texture& tex = _assets.GetTexture(s.TextureName);
+            const sf::Texture &tex = _assets.GetTexture(s.TextureName);
             sf::Sprite sprite(tex);
             sprite.setPosition({t.X, t.Y});
             sprite.setScale({t.ScaleX, t.ScaleY});

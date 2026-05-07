@@ -7,18 +7,15 @@
 #include "../../Sample/Graphics/SpriteRenderSystem.h"
 #include "../../Sample/Level/LevelInitializer.h"
 
-class GameScene final : public Scene
-{
+class GameScene final : public Scene {
     static constexpr sf::Color BackgroundColor{0x64, 0x64, 0xff, 0xff}; // #6464ff
 
 public:
-    explicit GameScene(GameEngine& engine)
-        : Scene(engine)
-    {}
+    explicit GameScene(GameEngine &engine)
+        : Scene(engine) {
+    }
 
-    void Init() override
-    {
-
+    void Init() override {
         systemsManager.AddInitializer(
             std::make_shared<LevelInitializer>(world, "level.json", gameEngine.Assets()));
 
@@ -31,13 +28,11 @@ public:
         systemsManager.Initialize();
     }
 
-    void Update(float delta) override
-    {
-;
+    void Update(float delta) override {
+        ;
     }
 
-    void Render(sf::RenderWindow& window) override
-    {
+    void Render(sf::RenderWindow &window) override {
         window.clear(BackgroundColor);
         systemsManager.Update();
     }

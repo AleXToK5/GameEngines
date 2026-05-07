@@ -2,6 +2,7 @@
 #define FOLLOWXCAMERATAG_H
 
 // Тег-компонент: камера следует за игроком по оси X
-struct FollowXCameraTag {};
+struct FollowXCameraTag {
+};
 
 #endif //FOLLOWXCAMERATAG_H

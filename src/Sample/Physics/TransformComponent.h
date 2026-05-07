@@ -3,8 +3,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
-struct TransformComponent
-{
+struct TransformComponent {
     float X;
     float Y;
     float ScaleX = 1.f;

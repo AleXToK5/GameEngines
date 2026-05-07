@@ -3,8 +3,8 @@
 
 #include <SFML/System/Vector2.hpp>
 
-struct MoveInputEvent
-{
+struct MoveInputEvent {
+
     sf::Vector2f Direction;
 };
 
