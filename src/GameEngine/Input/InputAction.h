@@ -4,7 +4,7 @@
 
 #include "SFML/System/Vector2.hpp"
 
-enum ActionType { None, Start, End };
+enum class ActionType { None, Start, End };
 
 class InputAction {
     std::string _name;

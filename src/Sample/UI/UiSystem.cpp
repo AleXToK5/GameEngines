@@ -2,24 +2,29 @@
 
 UiSystem::UiSystem(World &world)
     : ISystem(world),
-      _positions(world.GetStorage<PositionComponent>()),
-      _configs(world.GetStorage<SpawnerConfigComponent>()),
-      _allWithPosition(FilterBuilder(world).With<PositionComponent>().Build()),
-      _configFilter(FilterBuilder(world).With<SpawnerConfigComponent>().Build()) {
+      _transforms(world.GetStorage<TransformComponent>()),
+      _settings(world.GetStorage<RenderSettingsComponent>()),
+      _allWithTransform(FilterBuilder(world).With<TransformComponent>().Build()),
+      _settingsFilter(FilterBuilder(world).With<RenderSettingsComponent>().Build()) {
+}
+
+void UiSystem::OnInit() {
+    int e = world.CreateEntity();
+    _settings.Add(e, {true, false, true});
 }
 
 void UiSystem::OnUpdate() {
-    for (int cfgEnt: _configFilter) {
-        auto &cfg = _configs.Get(cfgEnt);
+    RenderSettingsComponent *currentSettings = nullptr;
+    for (int ent: _settingsFilter) {
+        currentSettings = &_settings.Get(ent);
+        break;
+    }
 
-        ImGui::Begin("Game Settings");
-        ImGui::Text("Asteroid Spawning");
-        ImGui::SliderInt("Min Spawn Delay (ms)", &cfg.MinSpawnTimeMs, 100, 5000);
-        ImGui::SliderInt("Max Spawn Delay (ms)", &cfg.MaxSpawnTimeMs, 100, 5000);
-
-        if (ImGui::Button("Spawn Asteroid Now")) {
-            cfg.ForceSpawn = true;
-        }
+    if (currentSettings) {
+        ImGui::Begin("Render Modes");
+        ImGui::Checkbox("Draw Textures", &currentSettings->DrawTextures);
+        ImGui::Checkbox("Draw Colliders", &currentSettings->DrawColliders);
+        ImGui::Checkbox("Draw Grid 64x64", &currentSettings->DrawGrid);
         ImGui::End();
     }
 
@@ -30,15 +35,18 @@ void UiSystem::OnUpdate() {
         ImGui::TableSetupColumn("Pos Y");
         ImGui::TableHeadersRow();
 
-        for (int ent: _allWithPosition) {
-            auto &pos = _positions.Get(ent);
+        for (int ent: _allWithTransform) {
+            auto &transform = _transforms.Get(ent);
             ImGui::TableNextRow();
+
             ImGui::TableSetColumnIndex(0);
             ImGui::Text("%d", ent);
+
             ImGui::TableSetColumnIndex(1);
-            ImGui::Text("%.1f", pos.X);
+            ImGui::Text("%.1f", transform.X);
+
             ImGui::TableSetColumnIndex(2);
-            ImGui::Text("%.1f", pos.Y);
+            ImGui::Text("%.1f", transform.Y);
         }
         ImGui::EndTable();
     }

@@ -7,20 +7,22 @@
 #include "../../Ecs/World/World.h"
 #include "imgui.h"
 
-#include "../Physics/PositionComponent.h"
-#include "../Core/SpawnerConfigComponent.h"
+#include "../Physics/TransformComponent.h"
+#include "../Graphics/RenderSettingsComponent.h"
 
 class UiSystem final : public ISystem {
-    ComponentStorage<PositionComponent>& _positions;
-    ComponentStorage<SpawnerConfigComponent>& _configs;
-    
-    Filter _allWithPosition;
-    Filter _configFilter;
+    ComponentStorage<TransformComponent> &_transforms;
+    ComponentStorage<RenderSettingsComponent> &_settings;
+
+    Filter _allWithTransform;
+    Filter _settingsFilter;
 
 public:
     UiSystem(World &world);
-    void OnInit() override {}
+
+    void OnInit() override;
+
     void OnUpdate() override;
 };
 
-#endif
+#endif //UISYSTEM_H
