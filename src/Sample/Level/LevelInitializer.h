@@ -83,6 +83,7 @@ public:
 
             if (name == "Player") {
                 world.GetStorage<PlayerTag>().Add(e, {});
+                world.GetStorage<AnimatorComponent>().Add(e, {"IdleAnim", 0, 0});
 
                 if (configData.contains("Player")) {
                     auto &pData = configData["Player"];
@@ -92,6 +93,12 @@ public:
                     float jy = pData["JY"];
                     float sm = pData["SM"];
                     float gy = pData["GY"];
+
+                    float scale = pData.value("Scale", 2.0f);
+
+                    auto &t = world.GetStorage<TransformComponent>().Get(e);
+                    t.ScaleX = scale;
+                    t.ScaleY = scale;
 
                     world.GetStorage<PlayerComponent>().Add(e, {sx, jy, sm, false});
                     world.GetStorage<VelocityComponent>().Add(e, {0.f, 0.f});

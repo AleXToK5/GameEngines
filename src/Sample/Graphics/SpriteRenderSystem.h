@@ -11,6 +11,7 @@
 #include "../Physics/ColliderComponent.h"
 #include "SpriteComponent.h"
 #include "RenderSettingsComponent.h"
+#include "AnimatorComponent.h"
 
 class SpriteRenderSystem final : public ISystem {
     sf::RenderWindow &_window;
@@ -20,6 +21,7 @@ class SpriteRenderSystem final : public ISystem {
     ComponentStorage<SpriteComponent> &_sprites;
     ComponentStorage<ColliderComponent> &_colliders;
     ComponentStorage<RenderSettingsComponent> &_settings;
+    ComponentStorage<AnimatorComponent> &_animators;
 
     Filter _spriteFilter;
     Filter _colliderFilter;
@@ -39,6 +41,7 @@ public:
           _sprites(world.GetStorage<SpriteComponent>()),
           _colliders(world.GetStorage<ColliderComponent>()),
           _settings(world.GetStorage<RenderSettingsComponent>()),
+          _animators(world.GetStorage<AnimatorComponent>()),
           _spriteFilter(FilterBuilder(world).With<TransformComponent>().With<SpriteComponent>().Build()),
           _colliderFilter(FilterBuilder(world).With<TransformComponent>().With<ColliderComponent>().Build()),
           _settingsFilter(FilterBuilder(world).With<RenderSettingsComponent>().Build()) {
@@ -61,16 +64,41 @@ public:
         if (currentSettings->DrawTextures) {
             for (int e: _spriteFilter) {
                 auto &t = _transforms.Get(e);
-                auto &s = _sprites.Get(e);
 
-                const sf::Texture &tex = _assets.GetTexture(s.TextureName);
-                sf::Sprite sprite(tex);
+                float hw, hh;
 
-                sprite.setOrigin({tex.getSize().x / 2.0f, tex.getSize().y / 2.0f});
+                if (_animators.Has(e)) {
+                    auto &anim = _animators.Get(e);
+                    const Animation &animData = _assets.GetAnimation(anim.CurrentAnimation);
 
-                sprite.setPosition({t.X, t.Y});
-                sprite.setScale({t.ScaleX, t.ScaleY});
-                _window.draw(sprite);
+                    const sf::Texture &tex = animData.GetTexture();
+                    int fw = animData.Size().x;
+                    int fh = animData.Size().y;
+
+                    sf::IntRect frameRect({anim.CurrentFrame * fw, 0}, {fw, fh});
+                    sf::Sprite sprite(tex, frameRect);
+
+                    hw = fw / 2.0f;
+                    hh = fh / 2.0f;
+
+                    sprite.setOrigin({hw, hh});
+                    sprite.setPosition({t.X, t.Y});
+                    sprite.setScale({t.ScaleX, t.ScaleY});
+                    _window.draw(sprite);
+                } else {
+                    auto &s = _sprites.Get(e);
+
+                    const sf::Texture &tex = _assets.GetTexture(s.TextureName);
+                    sf::Sprite sprite(tex);
+
+                    hw = tex.getSize().x / 2.0f;
+                    hh = tex.getSize().y / 2.0f;
+
+                    sprite.setOrigin({hw, hh});
+                    sprite.setPosition({t.X, t.Y});
+                    sprite.setScale({t.ScaleX, t.ScaleY});
+                    _window.draw(sprite);
+                }
             }
         }
 

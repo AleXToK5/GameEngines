@@ -9,6 +9,8 @@
 #include "../../Sample/Graphics/SpriteRenderSystem.h"
 #include "../../Sample/Level/LevelInitializer.h"
 #include "../../Sample/UI/UiSystem.h"
+#include "../../Sample/Gameplay/Player/PlayerStateSystem.h"
+#include "../../Sample/Graphics/AnimationSystem.h"
 
 class GameScene final : public Scene {
     static constexpr sf::Color BackgroundColor{0x64, 0x64, 0xff, 0xff}; // #6464ff
@@ -45,6 +47,8 @@ public:
         systemsManager.AddSystem(std::make_shared<FollowXCameraSystem>(world, gameEngine.Window()));
         systemsManager.AddSystem(std::make_shared<SpriteRenderSystem>(world, gameEngine.Window(), gameEngine.Assets()));
         systemsManager.AddSystem(std::make_shared<UiSystem>(world));
+        systemsManager.AddSystem(std::make_shared<PlayerStateSystem>(world));
+        systemsManager.AddSystem(std::make_shared<AnimationSystem>(world, gameEngine.Assets()));
 
         systemsManager.Initialize();
     }

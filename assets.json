@@ -59,6 +59,12 @@
       "textureName": "TexRun",
       "frameCount": 3,
       "frameDuration": 10
+    },
+    {
+      "name": "IdleAnim",
+      "textureName": "MegaIdle",
+      "frameCount": 3,
+      "frameDuration": 30
     }
   ],
   "Fonts": [
