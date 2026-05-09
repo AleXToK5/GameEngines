@@ -2,10 +2,7 @@ set(TARGET_NAME main)
 set(SOURCES main.cpp
         ConfigReader.cpp
         ConfigReader.h
-        Sample/Physics/MovementSystem.cpp
         Sample/Physics/MovementSystem.h
-        Sample/Core/InitSystem.cpp
-        Sample/Core/InitSystem.h
         Sample/Graphics/RenderSystem.cpp
         Sample/Graphics/RenderSystem.h
         Sample/Physics/PositionComponent.h
@@ -14,10 +11,6 @@ set(SOURCES main.cpp
         Sample/Input/InputSystem.cpp
         Sample/Input/InputSystem.h
         Sample/Input/MoveInputEvent.h
-        Sample/Gameplay/Player/PlayerShootSystem.cpp
-        Sample/Gameplay/Enemies/AsteroidSpawnerSystem.cpp
-        Sample/Physics/CollisionSystem.cpp
-        Sample/Core/RestartSystem.cpp
         Sample/UI/UiSystem.cpp
         GameEngine/GameEngine.cpp
         GameEngine/GameEngine.h
@@ -51,8 +44,8 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Assets
 
 add_subdirectory(Ecs)
 
-add_executable(${TARGET_NAME} 
-    ${SOURCES})
+add_executable(${TARGET_NAME}
+        ${SOURCES})
 
 #target_compile_options(${TARGET_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)

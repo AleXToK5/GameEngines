@@ -65,8 +65,9 @@ public:
 
                 const sf::Texture &tex = _assets.GetTexture(s.TextureName);
                 sf::Sprite sprite(tex);
-                // Опционально: отцентровать спрайт
-                // sprite.setOrigin(tex.getSize().x / 2.0f, tex.getSize().y / 2.0f);
+
+                sprite.setOrigin({tex.getSize().x / 2.0f, tex.getSize().y / 2.0f});
+
                 sprite.setPosition({t.X, t.Y});
                 sprite.setScale({t.ScaleX, t.ScaleY});
                 _window.draw(sprite);

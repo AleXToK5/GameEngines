@@ -43,16 +43,17 @@ void GameEngine::Run() {
 
         _inputManager->ProcessInput(_currentScene);
 
+        ImGui::SFML::Update(_window, sf::milliseconds(static_cast<int32_t>(deltaTime * 1000.f)));
+
         if (_scenes.count(_currentScene))
             _scenes[_currentScene]->Update(deltaTime);
 
-        // Применяем отложенную смену сцены ПОСЛЕ Update
-        if (_pendingSceneChange) {
+        if (_pendingSceneChange)
+        {
             _pendingSceneChange();
             _pendingSceneChange = nullptr;
         }
 
-        ImGui::SFML::Update(_window, sf::milliseconds(static_cast<int32_t>(deltaTime * 1000.f)));
         Render();
     }
 

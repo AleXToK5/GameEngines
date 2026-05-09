@@ -3,32 +3,17 @@
     "width": 1280,
     "height": 720
   },
-
   "fonts": {
     "main": "fonts/futura.ttf"
   },
-
-  "player": {
-    "movement_speed": 500,
-    "shoot_cooldown_ms": 250
-  },
-
-  "projectile": {
-    "speed": 500
-  },
-
-  "asteroid": {
-    "spawn_time_min_ms": 1000,
-    "spawn_time_max_ms": 3000,
-    "speed_min": 10,
-    "speed_max": 100,
-    "size_min": 20,
-    "size_max": 60,
-    "direction_x_min": -1.0,
-    "direction_x_max": 1.0,
-    "direction_y_min": 0.2,
-    "direction_y_max": 1.0,
-    "circle_points_min": 5,
-    "circle_points_max": 10
+  "Player": {
+    "Bbox": [
+      48,
+      64
+    ],
+    "SX": 5.0,
+    "JY": -15.0,
+    "SM": 12.0,
+    "GY": 0.4
   }
 }

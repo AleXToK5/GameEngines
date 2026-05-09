@@ -3,6 +3,8 @@
 
 #include "../../GameEngine/Scene.h"
 #include "../../GameEngine/GameEngine.h"
+#include "../../Sample/Physics/MovementSystem.h"
+#include "../../Sample/Physics/PlatformCollisionSystem.h"
 #include "../../Sample/Camera/FollowXCameraSystem.h"
 #include "../../Sample/Graphics/SpriteRenderSystem.h"
 #include "../../Sample/Level/LevelInitializer.h"
@@ -18,16 +20,31 @@ public:
 
     void Init() override {
         systemsManager.AddInitializer(
-            std::make_shared<LevelInitializer>(world, "level.json", gameEngine.Assets()));
+            std::make_shared<LevelInitializer>(
+                world,
+                "level.json",
+                "config.json",
+                gameEngine.Assets(),
+                static_cast<float>(gameEngine.Window().getSize().y)
+            )
+        );
 
-        systemsManager.AddSystem(
-            std::make_shared<FollowXCameraSystem>(world, gameEngine.Window()));
+        RegisterAction(sf::Keyboard::Key::A, "MoveLeft");
+        RegisterAction(sf::Keyboard::Key::D, "MoveRight");
+        RegisterAction(sf::Keyboard::Key::W, "Jump");
 
-        systemsManager.AddSystem(
-            std::make_shared<SpriteRenderSystem>(world, gameEngine.Window(), gameEngine.Assets()));
+        systemsManager.AddSystem(std::make_shared<MovementSystem>(
+            world,
+            actionMap["MoveLeft"],
+            actionMap["MoveRight"],
+            actionMap["Jump"]
+        ));
 
-        systemsManager.AddSystem(
-            std::make_shared<UiSystem>(world));
+        systemsManager.AddSystem(std::make_shared<PlatformCollisionSystem>(world));
+
+        systemsManager.AddSystem(std::make_shared<FollowXCameraSystem>(world, gameEngine.Window()));
+        systemsManager.AddSystem(std::make_shared<SpriteRenderSystem>(world, gameEngine.Window(), gameEngine.Assets()));
+        systemsManager.AddSystem(std::make_shared<UiSystem>(world));
 
         systemsManager.Initialize();
     }
