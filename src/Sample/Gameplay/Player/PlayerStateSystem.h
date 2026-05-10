@@ -15,14 +15,16 @@ class PlayerStateSystem final : public ISystem {
     ComponentStorage<AnimatorComponent> &_animators;
     ComponentStorage<PlayerComponent> &_players;
     Filter _filter;
+    float _killY;
 
 public:
-    PlayerStateSystem(World &world)
+    PlayerStateSystem(World &world, float windowHeight)
         : ISystem(world),
           _velocities(world.GetStorage<VelocityComponent>()),
           _transforms(world.GetStorage<TransformComponent>()),
           _animators(world.GetStorage<AnimatorComponent>()),
           _players(world.GetStorage<PlayerComponent>()),
+          _killY(windowHeight + 200.0f),
           _filter(
               FilterBuilder(world).With<VelocityComponent>().With<TransformComponent>().With<AnimatorComponent>().With<
                   PlayerComponent>().Build()) {
@@ -37,6 +39,13 @@ public:
             auto &t = _transforms.Get(e);
             auto &anim = _animators.Get(e);
             auto &player = _players.Get(e);
+
+            if (t.Y > _killY) {
+                t.X = player.SpawnX;
+                t.Y = player.SpawnY;
+                vel.X = 0.0f;
+                vel.Y = 0.0f;
+            }
 
             std::string targetAnim = "IdleAnim";
             if (!player.IsGrounded) {

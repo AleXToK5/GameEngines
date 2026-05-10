@@ -57,7 +57,6 @@ public:
         float cx = win.getSize().x / 2.f;
         float cy = win.getSize().y / 2.f;
 
-        // Позиции кнопок
         auto centerText = [](sf::Text &t, float x, float y) {
             sf::FloatRect b = t.getLocalBounds();
             t.setOrigin({b.position.x + b.size.x / 2.f, b.position.y + b.size.y / 2.f});
@@ -68,7 +67,6 @@ public:
         centerText(_playText, cx, cy);
         centerText(_exitText, cx, cy + 100.f);
 
-        // Hover по мыши
         if (_mouseMove->Type() == ActionType::Start) {
             sf::Vector2f mp = static_cast<sf::Vector2f>(_mouseMove->Value2());
             _playHovered = _playText.getGlobalBounds().contains(mp);
@@ -77,12 +75,17 @@ public:
             _exitText.setFillColor(_exitHovered ? sf::Color::Yellow : sf::Color::White);
         }
 
-        // Клик
         if (_mouseClick->Type() == ActionType::End) {
             sf::Vector2f mp = static_cast<sf::Vector2f>(_mouseMove->Value2());
             if (_playText.getGlobalBounds().contains(mp)) {
-                gameEngine.RequestSceneChange([this]() {
-                    gameEngine.LoadScene<GameScene>(gameEngine);
+                auto &eng = gameEngine;
+                eng.RequestSceneChange([&eng]() {
+                    // Передаем коллбек возврата в меню
+                    eng.LoadScene<GameScene>(eng, [&eng]() {
+                        eng.RequestSceneChange([&eng]() {
+                            eng.LoadScene<MenuScene>(eng);
+                        });
+                    });
                 });
             } else if (_exitText.getGlobalBounds().contains(mp)) {
                 gameEngine.Quit();

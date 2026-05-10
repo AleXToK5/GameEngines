@@ -3,18 +3,14 @@
 #include "GameEngine/GameEngineConfiguration.h"
 #include "Sample/Scenes/MenuScene.h"
 
-int main()
-{
+int main() {
     setlocale(LC_ALL, "");
 
-    try
-    {
+    try {
         GameEngine engine{GameEngineConfiguration{}};
         engine.LoadScene<MenuScene>(engine);
         engine.Run();
-    }
-    catch (const std::exception& e)
-    {
+    } catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }

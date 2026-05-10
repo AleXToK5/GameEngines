@@ -8,6 +8,9 @@ struct PlayerComponent {
     bool IsGrounded = false;
     int ShootCooldown = 0;
     int MaxCooldown = 20;
+    bool IsFinished = false;
+    float SpawnX = 0.f;
+    float SpawnY = 0.f;
 };
 
 #endif

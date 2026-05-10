@@ -88,6 +88,7 @@ public:
                 } else {
                     auto &s = _sprites.Get(e);
 
+                    if (s.TextureName.empty()) continue;
                     const sf::Texture &tex = _assets.GetTexture(s.TextureName);
                     sf::Sprite sprite(tex);
 
@@ -102,6 +103,7 @@ public:
             }
         }
 
+        // 2. Отрисовка Коллайдеров
         // 2. Отрисовка Коллайдеров
         if (currentSettings->DrawColliders) {
             for (int e: _colliderFilter) {
