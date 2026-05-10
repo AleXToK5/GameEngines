@@ -60,6 +60,36 @@
     "y": 4
   },
   {
+    "name": "Brick",
+    "x": 7,
+    "y": 2
+  },
+  {
+    "name": "Brick",
+    "x": 7,
+    "y": 3
+  },
+  {
+    "name": "Brick",
+    "x": 7,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 8,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 9,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 10,
+    "y": 4
+  },
+  {
     "name": "Tile",
     "x": 10,
     "y": 1

@@ -12,6 +12,7 @@
 #include "../Graphics/DestroyAfterAnimationComponent.h"
 #include "../Graphics/AnimatorComponent.h"
 #include "../Graphics/SpriteComponent.h"
+#include "../Gameplay/Weapons/ProjectileComponent.h"
 
 class PlatformCollisionSystem final : public ISystem {
     World &_world;
@@ -46,6 +47,7 @@ public:
             auto &dynC = _colliders.Get(dynEnt);
             auto &dynV = _velocities.Get(dynEnt);
             bool isPlayer = _players.Has(dynEnt);
+            bool isProjectile = _world.GetStorage<ProjectileComponent>().Has(dynEnt);
 
             for (int statEnt: _staticFilter) {
                 if (dynEnt == statEnt) continue;
@@ -65,6 +67,21 @@ public:
                 float intersectY = std::abs(dy) - (dynHalfH + statHalfH);
 
                 if (intersectX < 0.f && intersectY < 0.f) {
+                    if (isProjectile) {
+                        if (_world.GetStorage<BrickComponent>().Has(statEnt)) {
+                            int expEnt = _world.CreateEntity();
+                            _world.GetStorage<TransformComponent>().Add(expEnt, {statT.X, statT.Y, 2.0f, 2.0f});
+                            _world.GetStorage<SpriteComponent>().Add(expEnt, {"ExplosionTex"});
+                            _world.GetStorage<AnimatorComponent>().Add(expEnt, {"ExplosionAnim", 0, 0});
+                            _world.GetStorage<DestroyAfterAnimationComponent>().Add(expEnt, {});
+
+                            _world.RemoveEntity(statEnt);
+                        }
+
+                        _world.RemoveEntity(dynEnt);
+                        break;
+                    }
+
                     if (intersectX > intersectY) {
                         if (dx > 0) { dynT.X -= intersectX; } else { dynT.X += intersectX; }
                         dynV.X = 0.f;

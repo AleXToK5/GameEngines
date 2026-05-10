@@ -55,6 +55,14 @@
     {
       "name": "ExplosionTex",
       "path": "src/Assets/Animations/explosion.png"
+    },
+    {
+      "name": "BulletTex",
+      "path": "src/Assets/Textures/Bullet.png"
+    },
+    {
+      "name": "JumpTex",
+      "path": "src/Assets/Animations/MegaJump.png"
     }
   ],
   "Animations": [
@@ -75,6 +83,12 @@
       "textureName": "ExplosionTex",
       "frameCount": 12,
       "frameDuration": 3
+    },
+    {
+      "name": "JumpAnim",
+      "textureName": "JumpTex",
+      "frameCount": 1,
+      "frameDuration": 100
     }
   ],
   "Fonts": [

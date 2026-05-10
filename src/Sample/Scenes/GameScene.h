@@ -11,6 +11,7 @@
 #include "../../Sample/UI/UiSystem.h"
 #include "../../Sample/Gameplay/Player/PlayerStateSystem.h"
 #include "../../Sample/Graphics/AnimationSystem.h"
+#include "../../Sample/Gameplay/Player/PlayerShootSystem.h"
 
 class GameScene final : public Scene {
     static constexpr sf::Color BackgroundColor{0x64, 0x64, 0xff, 0xff}; // #6464ff
@@ -34,7 +35,9 @@ public:
         RegisterAction(sf::Keyboard::Key::A, "MoveLeft");
         RegisterAction(sf::Keyboard::Key::D, "MoveRight");
         RegisterAction(sf::Keyboard::Key::W, "Jump");
+        RegisterAction(sf::Keyboard::Key::Space, "Shoot");
 
+        systemsManager.AddSystem(std::make_shared<PlayerShootSystem>(world, gameEngine.Assets(), actionMap["Shoot"]));
         systemsManager.AddSystem(std::make_shared<MovementSystem>(
             world,
             actionMap["MoveLeft"],

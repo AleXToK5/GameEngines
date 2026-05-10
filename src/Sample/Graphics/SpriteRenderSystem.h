@@ -108,15 +108,25 @@ public:
                 auto &bbox = _colliders.Get(e);
                 auto &t = _transforms.Get(e);
 
-                // Рисуем RectangleShape (предполагаем, что у ColliderComponent есть Size)
-                sf::RectangleShape rect;
-                rect.setSize(sf::Vector2f(bbox.Size.x - 1.f, bbox.Size.y - 1.f));
-                rect.setOrigin({bbox.Size.x / 2.f, bbox.Size.y / 2.f});
-                rect.setPosition({t.X, t.Y});
-                rect.setFillColor(sf::Color(0, 0, 0, 0)); // Прозрачный внутри
-                rect.setOutlineColor(sf::Color::Red);
-                rect.setOutlineThickness(1.5f);
-                _window.draw(rect);
+                if (bbox.Type == ColliderType::AABB) {
+                    sf::RectangleShape rect;
+                    rect.setSize(sf::Vector2f(bbox.Size.x - 1.f, bbox.Size.y - 1.f));
+                    rect.setOrigin({bbox.Size.x / 2.f, bbox.Size.y / 2.f});
+                    rect.setPosition({t.X, t.Y});
+                    rect.setFillColor(sf::Color::Transparent);
+                    rect.setOutlineColor(sf::Color::Red);
+                    rect.setOutlineThickness(1.5f);
+                    _window.draw(rect);
+                } else if (bbox.Type == ColliderType::Circle) {
+                    sf::CircleShape circle;
+                    circle.setRadius(bbox.Radius);
+                    circle.setOrigin({bbox.Radius, bbox.Radius});
+                    circle.setPosition({t.X, t.Y});
+                    circle.setFillColor(sf::Color::Transparent);
+                    circle.setOutlineColor(sf::Color::Red);
+                    circle.setOutlineThickness(1.5f);
+                    _window.draw(circle);
+                }
             }
         }
 
@@ -131,7 +141,7 @@ public:
             float leftX = view.getCenter().x - view.getSize().x / 2.0f;
             float rightX = leftX + view.getSize().x + gridSize;
 
-            float nextGridX = leftX - std::fmod(leftX, (float) gridSize);
+            float nextGridX = leftX - std::fmod(leftX, static_cast<float>(gridSize));
             if (nextGridX < leftX) nextGridX += gridSize;
 
             for (float x = nextGridX; x < rightX; x += gridSize) {
