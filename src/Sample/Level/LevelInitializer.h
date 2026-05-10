@@ -16,6 +16,7 @@
 #include "../Graphics/SpriteComponent.h"
 #include "../Gameplay/Player/PlayerComponent.h"
 #include "../Gameplay/PlayerTag.h"
+#include "../Gameplay/Environment/BrickComponent.h"
 
 static const std::unordered_map<std::string, std::string> LevelObjectTextures = {
     {"Player", "MegaIdle"},
@@ -117,6 +118,9 @@ public:
                                                               static_cast<uint16_t>(
                                                                   Player | Projectile)
                                                           });
+                if (name == "Brick") {
+                    world.GetStorage<BrickComponent>().Add(e, {});
+                }
             }
         }
     }

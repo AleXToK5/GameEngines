@@ -8,8 +8,10 @@
 #include "ColliderComponent.h"
 #include "VelocityComponent.h"
 #include "../Gameplay/Player/PlayerComponent.h"
+#include "../Gameplay/Environment/BrickComponent.h"
 
 class PlatformCollisionSystem final : public ISystem {
+    World &_world;
     ComponentStorage<TransformComponent> &_transforms;
     ComponentStorage<ColliderComponent> &_colliders;
     ComponentStorage<VelocityComponent> &_velocities;
@@ -21,6 +23,7 @@ class PlatformCollisionSystem final : public ISystem {
 public:
     PlatformCollisionSystem(World &world)
         : ISystem(world),
+          _world(world),
           _transforms(world.GetStorage<TransformComponent>()),
           _colliders(world.GetStorage<ColliderComponent>()),
           _velocities(world.GetStorage<VelocityComponent>()),
@@ -55,7 +58,6 @@ public:
 
                 float dx = dynT.X - statT.X;
                 float dy = dynT.Y - statT.Y;
-
                 float intersectX = std::abs(dx) - (dynHalfW + statHalfW);
                 float intersectY = std::abs(dy) - (dynHalfH + statHalfH);
 
@@ -67,6 +69,10 @@ public:
                         if (dy > 0) {
                             dynT.Y -= intersectY;
                             dynV.Y = 0.f;
+
+                            if (isPlayer && _world.GetStorage<BrickComponent>().Has(statEnt)) {
+                                _world.RemoveEntity(statEnt);
+                            }
                         } else {
                             dynT.Y += intersectY;
                             dynV.Y = 0.f;

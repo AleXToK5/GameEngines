@@ -1,62 +1,112 @@
 [
   {
     "name": "Player",
-    "x": 1,
-    "y": 7
+    "x": 2,
+    "y": 3
   },
   {
     "name": "Tile",
     "x": 0,
-    "y": 5
+    "y": 1
   },
   {
     "name": "Tile",
     "x": 1,
-    "y": 5
+    "y": 1
   },
   {
     "name": "Tile",
     "x": 2,
-    "y": 5
+    "y": 1
   },
   {
     "name": "Tile",
-    "x": 9,
-    "y": 6
-  },
-  {
-    "name": "Tile",
-    "x": 12,
-    "y": 8
-  },
-  {
-    "name": "Tile",
-    "x": 15,
-    "y": 5
-  },
-  {
-    "name": "BigHill",
     "x": 3,
-    "y": 8
+    "y": 1
   },
   {
-    "name": "Brick",
-    "x": 3,
-    "y": 5
+    "name": "Tile",
+    "x": 4,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 5,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 6,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 7,
+    "y": 1
   },
   {
     "name": "Brick",
     "x": 4,
-    "y": 5
+    "y": 4
   },
   {
     "name": "Brick",
     "x": 5,
-    "y": 5
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 6,
+    "y": 4
+  },
+  {
+    "name": "Tile",
+    "x": 10,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 11,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 12,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 13,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 14,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 15,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 12,
+    "y": 2
+  },
+  {
+    "name": "Tile",
+    "x": 13,
+    "y": 2
+  },
+  {
+    "name": "Pipe",
+    "x": 15,
+    "y": 2
   },
   {
     "name": "Finish",
-    "x": 16,
-    "y": 7
+    "x": 15,
+    "y": 4
   }
 ]
