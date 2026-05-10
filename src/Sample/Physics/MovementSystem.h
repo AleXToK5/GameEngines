@@ -2,6 +2,7 @@
 #define MOVEMENTSYSTEM_H
 
 #include <memory>
+#include <vector>
 #include "../../Ecs/Systems/ISystem.h"
 #include "../../Ecs/Filter/Filter.h"
 #include "../../Ecs/Filter/FilterBuilder.h"
@@ -10,6 +11,7 @@
 #include "VelocityComponent.h"
 #include "GravityComponent.h"
 #include "../Gameplay/Player/PlayerComponent.h"
+#include "../Gameplay/Weapons/ProjectileComponent.h"
 
 class MovementSystem final : public ISystem {
     ComponentStorage<TransformComponent> &_transforms;
@@ -76,6 +78,20 @@ public:
             const auto &v = _velocities.Get(e);
             t.X += v.X;
             t.Y += v.Y;
+        }
+
+        std::vector<int> bulletsToRemove;
+        float screenWidth = 1280.0f;
+
+        for (int e: FilterBuilder(world).With<ProjectileComponent>().With<TransformComponent>().Build()) {
+            auto &t = _transforms.Get(e);
+            if (t.X < -100.f || t.X > screenWidth + 100.f) {
+                bulletsToRemove.push_back(e);
+            }
+        }
+
+        for (int e: bulletsToRemove) {
+            world.RemoveEntity(e);
         }
     }
 };

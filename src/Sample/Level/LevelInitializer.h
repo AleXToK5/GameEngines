@@ -68,23 +68,19 @@ public:
             float gridX = obj.value("x", 0);
             float gridY = obj.value("y", 0);
 
-            float px = gridX * TileSize;
-            float py = _windowHeight - (gridY * TileSize) - TileSize;
-
-            px += TileSize / 2.f;
-            py += TileSize / 2.f;
+            float px = gridX * TileSize + TileSize / 2.f;
+            float py = _windowHeight - (gridY * TileSize) - TileSize / 2.f;
 
             auto it = LevelObjectTextures.find(name);
-            if (it == LevelObjectTextures.end()) continue;
+            if (it == LevelObjectTextures.end() && name != "Player") continue;
 
-            const std::string &texName = it->second;
             int e = world.CreateEntity();
             world.GetStorage<TransformComponent>().Add(e, {px, py, 1.f, 1.f});
-            world.GetStorage<SpriteComponent>().Add(e, {texName});
 
             if (name == "Player") {
                 world.GetStorage<PlayerTag>().Add(e, {});
                 world.GetStorage<AnimatorComponent>().Add(e, {"IdleAnim", 0, 0});
+                world.GetStorage<SpriteComponent>().Add(e, {"MegaIdle"});
 
                 if (configData.contains("Player")) {
                     auto &pData = configData["Player"];
@@ -112,11 +108,11 @@ public:
                                                               });
                 }
             } else if (name == "Tile" || name == "Brick") {
+                world.GetStorage<SpriteComponent>().Add(e, {it->second});
                 world.GetStorage<ColliderComponent>().Add(e, {
                                                               ColliderType::AABB, 0.f, {TileSize, TileSize},
                                                               Asteroid,
-                                                              static_cast<uint16_t>(
-                                                                  Player | Projectile)
+                                                              static_cast<uint16_t>(Player | Projectile)
                                                           });
                 if (name == "Brick") {
                     world.GetStorage<BrickComponent>().Add(e, {});
