@@ -63,6 +63,18 @@
     {
       "name": "JumpTex",
       "path": "src/Assets/Animations/MegaJump.png"
+    },
+    {
+      "name": "MegaShootIdle",
+      "path": "src/Assets/Animations/MegaShootIdle.png"
+    },
+    {
+      "name": "MegaShootRun",
+      "path": "src/Assets/Animations/MegaShootRun.png"
+    },
+    {
+      "name": "MegaShootJump",
+      "path": "src/Assets/Animations/MegaShootJump.png"
     }
   ],
   "Animations": [
@@ -87,6 +99,24 @@
     {
       "name": "JumpAnim",
       "textureName": "JumpTex",
+      "frameCount": 1,
+      "frameDuration": 100
+    },
+    {
+      "name": "ShootIdleAnim",
+      "textureName": "MegaShootIdle",
+      "frameCount": 1,
+      "frameDuration": 100
+    },
+    {
+      "name": "ShootRunAnim",
+      "textureName": "MegaShootRun",
+      "frameCount": 3,
+      "frameDuration": 100
+    },
+    {
+      "name": "ShootJumpAnim",
+      "textureName": "MegaShootJump",
       "frameCount": 1,
       "frameDuration": 100
     }

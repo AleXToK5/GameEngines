@@ -8,9 +8,6 @@ set(SOURCES main.cpp
         Sample/Physics/PositionComponent.h
         Sample/Physics/MovementComponent.h
         Sample/Graphics/RenderComponent.h
-        Sample/Input/InputSystem.cpp
-        Sample/Input/InputSystem.h
-        Sample/Input/MoveInputEvent.h
         Sample/UI/UiSystem.cpp
         GameEngine/GameEngine.cpp
         GameEngine/GameEngine.h

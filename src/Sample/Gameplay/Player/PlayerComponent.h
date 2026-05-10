@@ -11,6 +11,7 @@ struct PlayerComponent {
     bool IsFinished = false;
     float SpawnX = 0.f;
     float SpawnY = 0.f;
+    int ShootAnimTimer = 0;
 };
 
 #endif

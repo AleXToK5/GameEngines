@@ -66,6 +66,7 @@ public:
                                                            });
 
                 player.ShootCooldown = player.MaxCooldown;
+                player.ShootAnimTimer = 15;
             }
         }
     }

@@ -47,11 +47,18 @@ public:
                 vel.Y = 0.0f;
             }
 
+            if (player.ShootAnimTimer > 0) {
+                player.ShootAnimTimer--;
+            }
+
+            bool isShooting = player.ShootAnimTimer > 0;
             std::string targetAnim = "IdleAnim";
             if (!player.IsGrounded) {
-                targetAnim = "JumpAnim";
+                targetAnim = isShooting ? "ShootJumpAnim" : "JumpAnim";
             } else if (std::abs(vel.X) > 0.1f) {
-                targetAnim = "RunAnim";
+                targetAnim = isShooting ? "ShootRunAnim" : "RunAnim";
+            } else {
+                targetAnim = isShooting ? "ShootIdleAnim" : "IdleAnim";
             }
 
             if (anim.CurrentAnimation != targetAnim) {
