@@ -51,6 +51,10 @@
     {
       "name": "BigHill",
       "path": "src/Assets/Textures/hillBig.png"
+    },
+    {
+      "name": "ExplosionTex",
+      "path": "src/Assets/Animations/explosion.png"
     }
   ],
   "Animations": [
@@ -65,6 +69,12 @@
       "textureName": "MegaIdle",
       "frameCount": 3,
       "frameDuration": 30
+    },
+    {
+      "name": "ExplosionAnim",
+      "textureName": "ExplosionTex",
+      "frameCount": 12,
+      "frameDuration": 3
     }
   ],
   "Fonts": [

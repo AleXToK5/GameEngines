@@ -1,12 +1,15 @@
 #ifndef ANIMATIONSYSTEM_H
 #define ANIMATIONSYSTEM_H
 
+#include <vector>
 #include "../../Ecs/Systems/ISystem.h"
 #include "../../Ecs/Filter/FilterBuilder.h"
 #include "AnimatorComponent.h"
+#include "DestroyAfterAnimationComponent.h"
 #include "../../GameEngine/Assets/AssetManager.h"
 
 class AnimationSystem final : public ISystem {
+    World &_world; // Сохраняем ссылку на мир
     ComponentStorage<AnimatorComponent> &_animators;
     const AssetManager &_assets;
     Filter _filter;
@@ -14,6 +17,7 @@ class AnimationSystem final : public ISystem {
 public:
     AnimationSystem(World &world, const AssetManager &assets)
         : ISystem(world),
+          _world(world),
           _animators(world.GetStorage<AnimatorComponent>()),
           _assets(assets),
           _filter(FilterBuilder(world).With<AnimatorComponent>().Build()) {
@@ -23,6 +27,8 @@ public:
     }
 
     void OnUpdate() override {
+        std::vector<int> entitiesToRemove;
+
         for (int e: _filter) {
             auto &anim = _animators.Get(e);
             const Animation &animData = _assets.GetAnimation(anim.CurrentAnimation);
@@ -30,8 +36,21 @@ public:
             anim.FrameTimer++;
             if (anim.FrameTimer >= animData.FrameDuration()) {
                 anim.FrameTimer = 0;
-                anim.CurrentFrame = (anim.CurrentFrame + 1) % animData.FrameCount();
+
+                if (anim.CurrentFrame + 1 >= animData.FrameCount()) {
+                    if (_world.GetStorage<DestroyAfterAnimationComponent>().Has(e)) {
+                        entitiesToRemove.push_back(e);
+                    } else {
+                        anim.CurrentFrame = 0;
+                    }
+                } else {
+                    anim.CurrentFrame++;
+                }
             }
+        }
+
+        for (int e: entitiesToRemove) {
+            _world.RemoveEntity(e);
         }
     }
 };

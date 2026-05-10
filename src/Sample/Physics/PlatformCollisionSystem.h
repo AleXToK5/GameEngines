@@ -9,6 +9,9 @@
 #include "VelocityComponent.h"
 #include "../Gameplay/Player/PlayerComponent.h"
 #include "../Gameplay/Environment/BrickComponent.h"
+#include "../Graphics/DestroyAfterAnimationComponent.h"
+#include "../Graphics/AnimatorComponent.h"
+#include "../Graphics/SpriteComponent.h"
 
 class PlatformCollisionSystem final : public ISystem {
     World &_world;
@@ -71,6 +74,12 @@ public:
                             dynV.Y = 0.f;
 
                             if (isPlayer && _world.GetStorage<BrickComponent>().Has(statEnt)) {
+                                int expEnt = _world.CreateEntity();
+                                _world.GetStorage<TransformComponent>().Add(expEnt, {statT.X, statT.Y, 2.0f, 2.0f});
+                                _world.GetStorage<SpriteComponent>().Add(expEnt, {"ExplosionTex"});
+                                _world.GetStorage<AnimatorComponent>().Add(expEnt, {"ExplosionAnim", 0, 0});
+                                _world.GetStorage<DestroyAfterAnimationComponent>().Add(expEnt, {});
+
                                 _world.RemoveEntity(statEnt);
                             }
                         } else {
