@@ -1,7 +1,7 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 
-#include <functional> // <--- ИНКЛУД
+#include <functional>
 #include "../../GameEngine/Scene.h"
 #include "../../GameEngine/GameEngine.h"
 #include "../../Sample/Physics/MovementSystem.h"
@@ -18,7 +18,7 @@ class GameScene final : public Scene {
     static constexpr sf::Color BackgroundColor{0x64, 0x64, 0xff, 0xff};
 
     std::function<void()> _onQuit;
-    bool _isExiting = false; // <--- ПРЕДОХРАНИТЕЛЬ
+    bool _isExiting = false;
 
 public:
     explicit GameScene(GameEngine &engine, std::function<void()> onQuit = nullptr)
@@ -49,7 +49,7 @@ public:
     }
 
     void Update(float delta) override {
-        if (_isExiting) return; // Блокируем, если уже выходим
+        if (_isExiting) return;
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
             _isExiting = true;

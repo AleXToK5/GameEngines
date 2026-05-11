@@ -19,6 +19,7 @@
 #include "../Gameplay/Environment/BrickComponent.h"
 #include "../Gameplay/Environment/FinishComponent.h"
 #include "../Gameplay/Environment/DecorComponent.h"
+#include "../Graphics/AnimatorComponent.h"
 
 static const std::unordered_map<std::string, std::string> LevelObjectTextures = {
     {"Player", "MegaIdle"},
