@@ -7,7 +7,17 @@
   {
     "name": "Tile",
     "x": 0,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 0,
     "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 1,
+    "y": 0
   },
   {
     "name": "Tile",
@@ -17,7 +27,17 @@
   {
     "name": "Tile",
     "x": 2,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 2,
     "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 3,
+    "y": 0
   },
   {
     "name": "Tile",
@@ -27,57 +47,72 @@
   {
     "name": "Tile",
     "x": 4,
-    "y": 1
+    "y": 0
   },
   {
     "name": "Tile",
-    "x": 5,
-    "y": 1
-  },
-  {
-    "name": "Tile",
-    "x": 6,
-    "y": 1
-  },
-  {
-    "name": "Tile",
-    "x": 7,
-    "y": 1
-  },
-  {
-    "name": "Brick",
     "x": 4,
-    "y": 4
+    "y": 1
   },
   {
-    "name": "Brick",
+    "name": "Tile",
     "x": 5,
-    "y": 4
+    "y": 0
   },
   {
-    "name": "Brick",
+    "name": "Tile",
+    "x": 5,
+    "y": 1
+  },
+  {
+    "name": "Tile",
     "x": 6,
-    "y": 4
+    "y": 0
   },
   {
-    "name": "Brick",
+    "name": "Tile",
+    "x": 6,
+    "y": 1
+  },
+  {
+    "name": "Tile",
     "x": 7,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 7,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 8,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 8,
+    "y": 1
+  },
+  {
+    "name": "BigHill",
+    "x": 3,
     "y": 2
   },
   {
-    "name": "Brick",
-    "x": 7,
-    "y": 3
+    "name": "Cloud",
+    "x": 5,
+    "y": 8
   },
   {
-    "name": "Brick",
-    "x": 7,
-    "y": 4
+    "name": "Cloud",
+    "x": 14,
+    "y": 9
   },
   {
-    "name": "Brick",
-    "x": 8,
-    "y": 4
+    "name": "Cloud",
+    "x": 27,
+    "y": 9
   },
   {
     "name": "Brick",
@@ -91,8 +126,8 @@
   },
   {
     "name": "Tile",
-    "x": 10,
-    "y": 1
+    "x": 11,
+    "y": 0
   },
   {
     "name": "Tile",
@@ -102,7 +137,17 @@
   {
     "name": "Tile",
     "x": 12,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 12,
     "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 13,
+    "y": 0
   },
   {
     "name": "Tile",
@@ -112,7 +157,17 @@
   {
     "name": "Tile",
     "x": 14,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 14,
     "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 15,
+    "y": 0
   },
   {
     "name": "Tile",
@@ -121,17 +176,482 @@
   },
   {
     "name": "Tile",
-    "x": 12,
+    "x": 16,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 16,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 17,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 17,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 18,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 18,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 19,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 19,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 20,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 20,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 21,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 21,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 22,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 22,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 23,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 23,
+    "y": 1
+  },
+  {
+    "name": "BigHill",
+    "x": 14,
+    "y": 2
+  },
+  {
+    "name": "Brick",
+    "x": 13,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 14,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 15,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 23,
+    "y": 2
+  },
+  {
+    "name": "Brick",
+    "x": 23,
+    "y": 3
+  },
+  {
+    "name": "Brick",
+    "x": 23,
+    "y": 4
+  },
+  {
+    "name": "Brick",
+    "x": 23,
+    "y": 5
+  },
+  {
+    "name": "Brick",
+    "x": 24,
+    "y": 5
+  },
+  {
+    "name": "Brick",
+    "x": 25,
+    "y": 5
+  },
+  {
+    "name": "Brick",
+    "x": 26,
+    "y": 5
+  },
+  {
+    "name": "Tile",
+    "x": 28,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 28,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 29,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 29,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 30,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 30,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 31,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 31,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 32,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 32,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 33,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 33,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 34,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 34,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 35,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 35,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 36,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 36,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 37,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 37,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 38,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 38,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 39,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 39,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 40,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 40,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 41,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 41,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 42,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 42,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 43,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 43,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 44,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 44,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 45,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 45,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 46,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 46,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 47,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 47,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 48,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 48,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 49,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 49,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 50,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 50,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 51,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 51,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 52,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 52,
+    "y": 1
+  },
+  {
+    "name": "Tile",
+    "x": 53,
+    "y": 0
+  },
+  {
+    "name": "Tile",
+    "x": 53,
+    "y": 1
+  },
+  {
+    "name": "BigHill",
+    "x": 30,
+    "y": 2
+  },
+  {
+    "name": "BigHill",
+    "x": 42,
     "y": 2
   },
   {
     "name": "Tile",
-    "x": 13,
+    "x": 38,
     "y": 2
   },
   {
+    "name": "Tile",
+    "x": 39,
+    "y": 2
+  },
+  {
+    "name": "Tile",
+    "x": 39,
+    "y": 3
+  },
+  {
+    "name": "Tile",
+    "x": 40,
+    "y": 2
+  },
+  {
+    "name": "Tile",
+    "x": 40,
+    "y": 3
+  },
+  {
+    "name": "Tile",
+    "x": 40,
+    "y": 4
+  },
+  {
+    "name": "Tile",
+    "x": 41,
+    "y": 2
+  },
+  {
+    "name": "Tile",
+    "x": 41,
+    "y": 3
+  },
+  {
+    "name": "Tile",
+    "x": 41,
+    "y": 4
+  },
+  {
+    "name": "Tile",
+    "x": 41,
+    "y": 5
+  },
+  {
+    "name": "Tile",
+    "x": 42,
+    "y": 2
+  },
+  {
+    "name": "Tile",
+    "x": 42,
+    "y": 3
+  },
+  {
+    "name": "Tile",
+    "x": 42,
+    "y": 4
+  },
+  {
+    "name": "Tile",
+    "x": 42,
+    "y": 5
+  },
+  {
     "name": "Finish",
-    "x": 16,
-    "y": 1
+    "x": 50,
+    "y": 2
   }
 ]

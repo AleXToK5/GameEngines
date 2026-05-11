@@ -12,8 +12,10 @@
 #include "SpriteComponent.h"
 #include "RenderSettingsComponent.h"
 #include "AnimatorComponent.h"
+#include "../Gameplay/Environment/DecorComponent.h" // <-- ДОБАВИЛИ ИНКЛУД
 
 class SpriteRenderSystem final : public ISystem {
+    World &_world; // <-- ДОБАВИЛИ ССЫЛКУ НА ДВИЖОК
     sf::RenderWindow &_window;
     const AssetManager &_assets;
 
@@ -35,6 +37,7 @@ class SpriteRenderSystem final : public ISystem {
 public:
     SpriteRenderSystem(World &world, sf::RenderWindow &window, const AssetManager &assets)
         : ISystem(world),
+          _world(world), // <-- ИНИЦИАЛИЗИРУЕМ
           _window(window),
           _assets(assets),
           _transforms(world.GetStorage<TransformComponent>()),
@@ -51,7 +54,6 @@ public:
     }
 
     void OnUpdate() override {
-        // Получаем настройки рендера
         RenderSettingsComponent *currentSettings = nullptr;
         for (int e: _settingsFilter) {
             currentSettings = &_settings.Get(e);
@@ -62,7 +64,7 @@ public:
 
         // 1. Отрисовка Текстур
         if (currentSettings->DrawTextures) {
-            for (int e: _spriteFilter) {
+            auto drawEntity = [&](int e) {
                 auto &t = _transforms.Get(e);
 
                 float hw, hh;
@@ -88,7 +90,7 @@ public:
                 } else {
                     auto &s = _sprites.Get(e);
 
-                    if (s.TextureName.empty()) continue;
+                    if (s.TextureName.empty()) return;
                     const sf::Texture &tex = _assets.GetTexture(s.TextureName);
                     sf::Sprite sprite(tex);
 
@@ -100,10 +102,21 @@ public:
                     sprite.setScale({t.ScaleX, t.ScaleY});
                     _window.draw(sprite);
                 }
+            };
+
+            for (int e: _spriteFilter) {
+                if (_world.GetStorage<DecorComponent>().Has(e)) {
+                    drawEntity(e);
+                }
+            }
+
+            for (int e: _spriteFilter) {
+                if (!_world.GetStorage<DecorComponent>().Has(e)) {
+                    drawEntity(e);
+                }
             }
         }
 
-        // 2. Отрисовка Коллайдеров
         // 2. Отрисовка Коллайдеров
         if (currentSettings->DrawColliders) {
             for (int e: _colliderFilter) {

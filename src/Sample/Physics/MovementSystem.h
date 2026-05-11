@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <cmath>
 #include "../../Ecs/Systems/ISystem.h"
 #include "../../Ecs/Filter/Filter.h"
 #include "../../Ecs/Filter/FilterBuilder.h"
@@ -80,12 +81,17 @@ public:
             t.Y += v.Y;
         }
 
+        float playerX = 0.0f;
+        for (int p: _playersFilter) {
+            playerX = _transforms.Get(p).X;
+            break;
+        }
+
         std::vector<int> bulletsToRemove;
-        float screenWidth = 1280.0f;
 
         for (int e: FilterBuilder(world).With<ProjectileComponent>().With<TransformComponent>().Build()) {
             auto &t = _transforms.Get(e);
-            if (t.X < -100.f || t.X > screenWidth + 100.f) {
+            if (std::abs(t.X - playerX) > 800.f) {
                 bulletsToRemove.push_back(e);
             }
         }

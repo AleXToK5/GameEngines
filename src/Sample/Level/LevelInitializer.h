@@ -18,14 +18,15 @@
 #include "../Gameplay/PlayerTag.h"
 #include "../Gameplay/Environment/BrickComponent.h"
 #include "../Gameplay/Environment/FinishComponent.h"
+#include "../Gameplay/Environment/DecorComponent.h"
 
 static const std::unordered_map<std::string, std::string> LevelObjectTextures = {
     {"Player", "MegaIdle"},
     {"Tile", "Tile"},
     {"Brick", "Brick Tile"},
     {"BigHill", "BigHill"},
-    {"Pipe", "Pipe Up R"},
     {"Finish", "Finish"},
+    {"Cloud", "Cloud"},
 };
 
 class LevelInitializer final : public IInitializer {
@@ -115,6 +116,9 @@ public:
 
                     if (name == "Brick") world.GetStorage<BrickComponent>().Add(e, {});
                 }
+            } else if (name == "BigHill" || name == "Cloud") {
+                world.GetStorage<SpriteComponent>().Add(e, {it->second});
+                world.GetStorage<DecorComponent>().Add(e, {});
             }
         }
     }

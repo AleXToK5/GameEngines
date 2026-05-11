@@ -53,6 +53,10 @@
       "path": "src/Assets/Textures/hillBig.png"
     },
     {
+      "name": "Cloud",
+      "path": "src/Assets/Textures/cloud.png"
+    },
+    {
       "name": "ExplosionTex",
       "path": "src/Assets/Animations/explosion.png"
     },
