@@ -2,6 +2,7 @@
 #define GAMESCENE_H
 
 #include <functional>
+#include <fstream>
 #include "../../GameEngine/Scene.h"
 #include "../../GameEngine/GameEngine.h"
 #include "../../Sample/Physics/MovementSystem.h"
@@ -20,9 +21,12 @@ class GameScene final : public Scene {
     std::function<void()> _onQuit;
     bool _isExiting = false;
 
+    float _levelTime = 0.f;
+    sf::Text _hudTimeText;
+
 public:
     explicit GameScene(GameEngine &engine, std::function<void()> onQuit = nullptr)
-        : Scene(engine), _onQuit(onQuit) {
+        : Scene(engine), _onQuit(onQuit), _hudTimeText(engine.Assets().GetFont("BaseFont")) {
     }
 
     void Init() override {
@@ -45,11 +49,19 @@ public:
         systemsManager.AddSystem(std::make_shared<PlayerStateSystem>(world, gameEngine.Window().getSize().y));
         systemsManager.AddSystem(std::make_shared<AnimationSystem>(world, gameEngine.Assets()));
 
+        _hudTimeText = sf::Text(gameEngine.Assets().GetFont("BaseFont"), "TIME: 0.0", 36);
+        _hudTimeText.setFillColor(sf::Color::White);
+        _hudTimeText.setOutlineColor(sf::Color::Black);
+        _hudTimeText.setOutlineThickness(3.f);
+        _hudTimeText.setPosition({20.f, 20.f});
+
         systemsManager.Initialize();
     }
 
     void Update(float delta) override {
         if (_isExiting) return;
+
+        _levelTime += delta;
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
             _isExiting = true;
@@ -60,6 +72,19 @@ public:
         for (int e: FilterBuilder(world).With<PlayerComponent>().Build()) {
             if (world.GetStorage<PlayerComponent>().Get(e).IsFinished) {
                 _isExiting = true;
+
+                float bestTime = 999999.f;
+                std::ifstream inFile("best_time.txt");
+                if (inFile.is_open()) {
+                    inFile >> bestTime;
+                    inFile.close();
+                }
+
+                if (_levelTime < bestTime) {
+                    std::ofstream outFile("best_time.txt");
+                    outFile << _levelTime;
+                }
+
                 if (_onQuit) _onQuit();
                 return;
             }
@@ -69,6 +94,17 @@ public:
     void Render(sf::RenderWindow &window) override {
         window.clear(BackgroundColor);
         systemsManager.Update();
+
+        char timeStr[32];
+        snprintf(timeStr, sizeof(timeStr), "TIME: %.1f", _levelTime);
+        _hudTimeText.setString(timeStr);
+
+        sf::View oldView = window.getView();
+        window.setView(window.getDefaultView());
+
+        window.draw(_hudTimeText);
+
+        window.setView(oldView);
     }
 };
 

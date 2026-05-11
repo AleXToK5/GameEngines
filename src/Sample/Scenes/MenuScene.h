@@ -1,6 +1,7 @@
 #ifndef MENUSCENE_H
 #define MENUSCENE_H
 
+#include <fstream>
 #include "../../GameEngine/Scene.h"
 #include "../../GameEngine/GameEngine.h"
 #include "../../Sample/Camera/DefaultCameraSystem.h"
@@ -20,6 +21,8 @@ class MenuScene final : public Scene {
     sf::Text _playText;
     sf::Text _exitText;
 
+    sf::Text _bestTimeText;
+
     bool _playHovered = false;
     bool _exitHovered = false;
 
@@ -31,7 +34,8 @@ public:
         : Scene(engine),
           _titleText(engine.Assets().GetFont("BaseFont"), ""),
           _playText(engine.Assets().GetFont("BaseFont"), ""),
-          _exitText(engine.Assets().GetFont("BaseFont"), "") {
+          _exitText(engine.Assets().GetFont("BaseFont"), ""),
+          _bestTimeText(engine.Assets().GetFont("BaseFont"), "") {
     }
 
     void Init() override {
@@ -78,11 +82,29 @@ public:
         _exitBtnBg.setOutlineColor(sf::Color::White);
         _exitBtnBg.setOutlineThickness(2.f);
 
+        float bestTime = 0.f;
+        std::ifstream inFile("best_time.txt");
+        if (inFile.is_open()) {
+            inFile >> bestTime;
+        }
+
+        char timeStr[64];
+        if (bestTime > 0.f) {
+            snprintf(timeStr, sizeof(timeStr), "BEST TIME: %.1f s", bestTime);
+        } else {
+            snprintf(timeStr, sizeof(timeStr), "BEST TIME: --");
+        }
+
+        _bestTimeText = sf::Text(font, timeStr, 32);
+        _bestTimeText.setFillColor(sf::Color::Cyan);
+        _bestTimeText.setOutlineColor(sf::Color::Black);
+        _bestTimeText.setOutlineThickness(2.f);
+
         _mouseClick = std::make_shared<InputAction>("Click");
         gameEngine.RegisterInput(sf::Mouse::Button::Left, _mouseClick);
 
         _mouseMove = std::make_shared<InputAction>("MouseMove");
-        gameEngine.RegisterInput(MouseMove::Move, _mouseMove);
+        gameEngine.RegisterInput(Move, _mouseMove);
 
         systemsManager.Initialize();
     }
@@ -109,6 +131,8 @@ public:
 
         centerRect(_exitBtnBg, cx, cy + 100.f);
         centerText(_exitText, cx, cy + 95.f);
+
+        centerText(_bestTimeText, cx, cy + 180.f);
 
         if (_mouseMove->Type() == ActionType::Start) {
             sf::Vector2f mp = static_cast<sf::Vector2f>(_mouseMove->Value2());
@@ -145,7 +169,6 @@ public:
         window.clear(sf::Color(100, 100, 255));
 
         systemsManager.Update();
-
         window.draw(_dimOverlay);
 
         window.draw(_titleText);
@@ -153,6 +176,7 @@ public:
         window.draw(_playText);
         window.draw(_exitBtnBg);
         window.draw(_exitText);
+        window.draw(_bestTimeText);
     }
 };
 
