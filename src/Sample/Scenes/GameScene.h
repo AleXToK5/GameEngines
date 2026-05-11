@@ -20,13 +20,18 @@ class GameScene final : public Scene {
 
     std::function<void()> _onQuit;
     bool _isExiting = false;
+    bool _isPaused = false;
 
     float _levelTime = 0.f;
     sf::Text _hudTimeText;
+    sf::Text _pauseText;
+    sf::RectangleShape _pauseDim;
 
 public:
     explicit GameScene(GameEngine &engine, std::function<void()> onQuit = nullptr)
-        : Scene(engine), _onQuit(onQuit), _hudTimeText(engine.Assets().GetFont("BaseFont")) {
+        : Scene(engine), _onQuit(onQuit),
+          _hudTimeText(engine.Assets().GetFont("BaseFont")),
+          _pauseText(engine.Assets().GetFont("BaseFont")) {
     }
 
     void Init() override {
@@ -38,6 +43,7 @@ public:
         RegisterAction(sf::Keyboard::Key::D, "MoveRight");
         RegisterAction(sf::Keyboard::Key::W, "Jump");
         RegisterAction(sf::Keyboard::Key::Space, "Shoot");
+        RegisterAction(sf::Keyboard::Key::P, "Pause");
 
         systemsManager.AddSystem(std::make_shared<PlayerShootSystem>(world, gameEngine.Assets(), actionMap["Shoot"]));
         systemsManager.AddSystem(
@@ -55,11 +61,31 @@ public:
         _hudTimeText.setOutlineThickness(3.f);
         _hudTimeText.setPosition({20.f, 20.f});
 
+        _pauseText.setString("PAUSE");
+        _pauseText.setCharacterSize(100);
+        _pauseText.setFillColor(sf::Color::Yellow);
+        _pauseText.setOutlineColor(sf::Color::Black);
+        _pauseText.setOutlineThickness(5.f);
+
+        sf::FloatRect bounds = _pauseText.getLocalBounds();
+        _pauseText.setOrigin({bounds.position.x + bounds.size.x / 2.f, bounds.position.y + bounds.size.y / 2.f});
+        _pauseText.setPosition({gameEngine.Window().getSize().x / 2.f, gameEngine.Window().getSize().y / 2.f});
+
+        _pauseDim.setSize(static_cast<sf::Vector2f>(gameEngine.Window().getSize()));
+        _pauseDim.setFillColor(sf::Color(0, 0, 0, 150));
+
         systemsManager.Initialize();
     }
 
     void Update(float delta) override {
         if (_isExiting) return;
+
+        if (actionMap["Pause"]->Type() == ActionType::Start) {
+            _isPaused = !_isPaused;
+            actionMap["Pause"]->Type() = ActionType::None;
+        }
+
+        if (_isPaused) return;
 
         _levelTime += delta;
 
@@ -93,7 +119,10 @@ public:
 
     void Render(sf::RenderWindow &window) override {
         window.clear(BackgroundColor);
-        systemsManager.Update();
+
+        if (!_isPaused) {
+            systemsManager.Update();
+        }
 
         char timeStr[32];
         snprintf(timeStr, sizeof(timeStr), "TIME: %.1f", _levelTime);
@@ -103,6 +132,11 @@ public:
         window.setView(window.getDefaultView());
 
         window.draw(_hudTimeText);
+
+        if (_isPaused) {
+            window.draw(_pauseDim);
+            window.draw(_pauseText);
+        }
 
         window.setView(oldView);
     }
