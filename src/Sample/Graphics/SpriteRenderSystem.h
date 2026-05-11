@@ -12,10 +12,10 @@
 #include "SpriteComponent.h"
 #include "RenderSettingsComponent.h"
 #include "AnimatorComponent.h"
-#include "../Gameplay/Environment/DecorComponent.h" // <-- ДОБАВИЛИ ИНКЛУД
+#include "../Gameplay/Environment/DecorComponent.h"
 
 class SpriteRenderSystem final : public ISystem {
-    World &_world; // <-- ДОБАВИЛИ ССЫЛКУ НА ДВИЖОК
+    World &_world;
     sf::RenderWindow &_window;
     const AssetManager &_assets;
 
@@ -37,7 +37,7 @@ class SpriteRenderSystem final : public ISystem {
 public:
     SpriteRenderSystem(World &world, sf::RenderWindow &window, const AssetManager &assets)
         : ISystem(world),
-          _world(world), // <-- ИНИЦИАЛИЗИРУЕМ
+          _world(world),
           _window(window),
           _assets(assets),
           _transforms(world.GetStorage<TransformComponent>()),
