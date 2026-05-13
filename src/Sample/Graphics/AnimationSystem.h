@@ -9,7 +9,7 @@
 #include "../../GameEngine/Assets/AssetManager.h"
 
 class AnimationSystem final : public ISystem {
-    World &_world; // Сохраняем ссылку на мир
+    World &_world;
     ComponentStorage<AnimatorComponent> &_animators;
     const AssetManager &_assets;
     Filter _filter;

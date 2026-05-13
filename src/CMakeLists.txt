@@ -3,11 +3,7 @@ set(SOURCES main.cpp
         ConfigReader.cpp
         ConfigReader.h
         Sample/Physics/MovementSystem.h
-        Sample/Graphics/RenderSystem.cpp
-        Sample/Graphics/RenderSystem.h
-        Sample/Physics/PositionComponent.h
         Sample/Physics/MovementComponent.h
-        Sample/Graphics/RenderComponent.h
         Sample/UI/UiSystem.cpp
         GameEngine/GameEngine.cpp
         GameEngine/GameEngine.h
@@ -18,7 +14,6 @@ set(SOURCES main.cpp
         GameEngine/Assets/Animation.h
         GameEngine/Assets/AssetManager.cpp
         GameEngine/Assets/AssetManager.h
-        GameEngine/Input/InputAction.cpp
         GameEngine/Input/InputAction.h
         GameEngine/Input/InputManager.cpp
         GameEngine/Input/InputManager.h

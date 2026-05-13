@@ -59,7 +59,6 @@ public:
                 if (dynEnt == statEnt) continue;
                 if (_velocities.Has(statEnt)) continue;
 
-                // Пуля игнорирует финиш
                 if (isProjectile && _world.GetStorage<FinishComponent>().Has(statEnt)) continue;
 
                 if (entitiesToRemove.contains(statEnt) || entitiesToRemove.contains(dynEnt)) continue;
