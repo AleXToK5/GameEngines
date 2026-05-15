@@ -55,6 +55,10 @@ public:
             bool isPlayer = _players.Has(dynEnt);
             bool isProjectile = _world.GetStorage<ProjectileComponent>().Has(dynEnt);
 
+            dynT.X -= dynV.X;
+            dynT.Y -= dynV.Y;
+            dynT.X += dynV.X;
+
             for (int statEnt: _staticFilter) {
                 if (dynEnt == statEnt) continue;
                 if (_velocities.Has(statEnt)) continue;
@@ -86,23 +90,50 @@ public:
                         break;
                     }
 
-                    if (intersectX > intersectY) {
-                        if (dx > 0) { dynT.X -= intersectX; } else { dynT.X += intersectX; }
-                        dynV.X = 0.f;
-                    } else {
-                        if (dy > 0) {
-                            dynT.Y -= intersectY;
-                            dynV.Y = 0.f;
+                    if (dx > 0) { dynT.X -= intersectX; } else { dynT.X += intersectX; }
+                    dynV.X = 0.f;
+                }
+            }
 
-                            if (isPlayer && _world.GetStorage<BrickComponent>().Has(statEnt)) {
-                                entitiesToRemove.insert(statEnt);
-                                explosionsToCreate.push_back({statT.X, statT.Y});
-                            }
-                        } else {
-                            dynT.Y += intersectY;
-                            dynV.Y = 0.f;
-                            if (isPlayer) _players.Get(dynEnt).IsGrounded = true;
+            if (entitiesToRemove.contains(dynEnt)) continue;
+            dynT.Y += dynV.Y;
+
+            for (int statEnt: _staticFilter) {
+                if (dynEnt == statEnt || _velocities.Has(statEnt)) continue;
+                if (isProjectile && _world.GetStorage<FinishComponent>().Has(statEnt)) continue;
+                if (entitiesToRemove.contains(statEnt) || entitiesToRemove.contains(dynEnt)) continue;
+
+                auto &statC = _colliders.Get(statEnt);
+                auto &statT = _transforms.Get(statEnt);
+
+                float dx = dynT.X - statT.X;
+                float dy = dynT.Y - statT.Y;
+                float intersectX = std::abs(dx) - (dynC.Size.x / 2.f + statC.Size.x / 2.f);
+                float intersectY = std::abs(dy) - (dynC.Size.y / 2.f + statC.Size.y / 2.f);
+
+                if (intersectX < 0.f && intersectY < 0.f) {
+                    if (isProjectile) {
+                        if (_world.GetStorage<BrickComponent>().Has(statEnt)) {
+                            entitiesToRemove.insert(statEnt);
+                            explosionsToCreate.push_back({statT.X, statT.Y});
                         }
+                        entitiesToRemove.insert(dynEnt);
+                        break;
+                    }
+
+                    if (dy > 0) {
+                        dynT.Y -= intersectY;
+                        dynV.Y = 0.f;
+
+                        if (isPlayer && _world.GetStorage<BrickComponent>().Has(statEnt)) {
+                            entitiesToRemove.insert(statEnt);
+                            explosionsToCreate.push_back({statT.X, statT.Y});
+                        }
+                    } else {
+                        dynT.Y += intersectY;
+                        dynV.Y = 0.f;
+
+                        if (isPlayer) _players.Get(dynEnt).IsGrounded = true;
                     }
 
                     if (isPlayer && _world.GetStorage<FinishComponent>().Has(statEnt)) {
