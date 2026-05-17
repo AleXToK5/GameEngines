@@ -64,7 +64,7 @@ public:
                 if (_velocities.Has(statEnt)) continue;
 
                 if (isProjectile && _world.GetStorage<FinishComponent>().Has(statEnt)) continue;
-
+                if (isPlayer && _world.GetStorage<FinishComponent>().Has(statEnt)) continue;
                 if (entitiesToRemove.contains(statEnt) || entitiesToRemove.contains(dynEnt)) continue;
 
                 auto &statC = _colliders.Get(statEnt);
