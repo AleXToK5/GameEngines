@@ -1,28 +1,42 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <unordered_set>
 #include <SFML/System/Vector2.hpp>
 
 struct RenderState {
-    // Выбранный для размещения объект ("" = ничего не выбрано)
+    // Выбранный для размещения объект из палитры
     std::string SelectedObject;
 
-    // Объект "в руке" — подобранный для перемещения entity (-1 = нет)
+    // Удерживаемые entity (drag одного или группы)
+    // HeldEntity — первый схваченный, HeldOffset — смещение курсора от его позиции
     int HeldEntity = -1;
-
-    // Смещение между центром entity и точкой подбора (для точного drag)
     sf::Vector2f HeldOffset;
 
-    // Зум камеры
-    float Zoom = 1.f;
+    // Выделенные entity (Ctrl+клик или рамка)
+    std::unordered_set<int> Selection;
 
-    // Центр камеры в мировых координатах
+    // Смещения каждого выделенного entity от точки захвата
+    // key = entityId, value = offset от worldPos мыши в момент захвата
+    std::unordered_map<int, sf::Vector2f> SelectionOffsets;
+
+    // Буфер обмена: список {objName, relX, relY} относительно общего центра
+    struct ClipboardEntry {
+        std::string TextureName;
+        std::string ObjectName;  // для GameObjectFactory
+        sf::Vector2f RelPos;     // смещение от общего центра группы
+    };
+    std::vector<ClipboardEntry> Clipboard;
+
+    // Зум и камера
+    float Zoom = 1.f;
     sf::Vector2f CameraCenter;
 
-    // Нужно ли сохранить уровень в этот кадр
-    bool SaveRequested = false;
-
-    // Drag камеры: зажата ли средняя/правая кнопка для pan
+    // Pan
     bool IsPanning = false;
     sf::Vector2i PanStartMouse;
     sf::Vector2f PanStartCamera;
+
+    // Сохранение
+    bool SaveRequested = false;
 };

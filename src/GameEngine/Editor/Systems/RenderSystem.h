@@ -47,11 +47,14 @@ public:
             const auto& s = _sprites.Get(e);
             if (s.TextureName.empty()) continue;
 
-            try {
-                sf::Color tint = (e == _state.HeldEntity)
-                    ? sf::Color(255, 255, 100, 200)
-                    : sf::Color::White;
+            // Цвет: жёлтый — удерживается, голубой — выделен, белый — обычный
+            sf::Color tint = sf::Color::White;
+            if (e == _state.HeldEntity)
+                tint = sf::Color(255, 255, 100, 220);
+            else if (_state.Selection.count(e))
+                tint = sf::Color(100, 200, 255, 220);
 
+            try {
                 if (_animators.Has(e)) {
                     const auto& anim = _animators.Get(e);
                     const Animation& animData = _assets.GetAnimation(anim.CurrentAnimation);
@@ -72,10 +75,21 @@ public:
                     sprite.setColor(tint);
                     _window.draw(sprite);
                 }
-            } catch (const std::exception& ex) {
-                std::cerr << "[EditorRenderSystem] Entity " << e
-                          << " error: " << ex.what() << std::endl;
-            }
+
+                // Рамка вокруг выделенных
+                if (_state.Selection.count(e)) {
+                    sf::RectangleShape outline;
+                    float hw = EditorConstants::TileSize / 2.f;
+                    float hh = EditorConstants::TileSize / 2.f;
+                    outline.setSize({hw * 2.f, hh * 2.f});
+                    outline.setOrigin({hw, hh});
+                    outline.setPosition({t.X, t.Y});
+                    outline.setFillColor(sf::Color::Transparent);
+                    outline.setOutlineColor(sf::Color(100, 200, 255, 200));
+                    outline.setOutlineThickness(2.f);
+                    _window.draw(outline);
+                }
+            } catch (...) {}
         }
 
         RenderService::DrawPreview(_window, _state, _assets, _mousePixel);
