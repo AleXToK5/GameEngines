@@ -1,6 +1,10 @@
 #ifndef MENUSCENE_H
 #define MENUSCENE_H
 
+#ifdef EDITOR_ENABLED
+#include "../../GameEngine/Editor/EditorScene.h"
+#endif
+
 #include <fstream>
 #include "../../GameEngine/Scene.h"
 #include "../../GameEngine/GameEngine.h"
@@ -16,15 +20,17 @@ class MenuScene final : public Scene {
 
     sf::RectangleShape _playBtnBg;
     sf::RectangleShape _exitBtnBg;
+    sf::RectangleShape _editorBtnBg;
 
     sf::Text _titleText;
     sf::Text _playText;
     sf::Text _exitText;
-
+    sf::Text _editorText;
     sf::Text _bestTimeText;
 
-    bool _playHovered = false;
-    bool _exitHovered = false;
+    bool _playHovered   = false;
+    bool _exitHovered   = false;
+    bool _editorHovered = false;
 
     std::shared_ptr<InputAction> _mouseClick;
     std::shared_ptr<InputAction> _mouseMove;
@@ -35,6 +41,7 @@ public:
           _titleText(engine.Assets().GetFont("BaseFont"), ""),
           _playText(engine.Assets().GetFont("BaseFont"), ""),
           _exitText(engine.Assets().GetFont("BaseFont"), ""),
+          _editorText(engine.Assets().GetFont("BaseFont"), ""),
           _bestTimeText(engine.Assets().GetFont("BaseFont"), "") {
     }
 
@@ -82,6 +89,14 @@ public:
         _exitBtnBg.setOutlineColor(sf::Color::White);
         _exitBtnBg.setOutlineThickness(2.f);
 
+        _editorText = sf::Text(font, "EDITOR", 48);
+        _editorText.setFillColor(sf::Color::White);
+
+        _editorBtnBg.setSize({300.f, 80.f});
+        _editorBtnBg.setFillColor(sf::Color(50, 50, 50, 220));
+        _editorBtnBg.setOutlineColor(sf::Color::White);
+        _editorBtnBg.setOutlineThickness(2.f);
+
         float bestTime = 0.f;
         std::ifstream inFile("best_time.txt");
         if (inFile.is_open()) {
@@ -124,15 +139,23 @@ public:
             r.setPosition({x, y});
         };
 
-        centerText(_titleText, cx, cy - 200.f);
+        centerText(_titleText, cx, cy - 220.f);
 
-        centerRect(_playBtnBg, cx, cy - 20.f);
-        centerText(_playText, cx, cy - 25.f);
+        centerRect(_playBtnBg, cx, cy - 80.f);
+        centerText(_playText,  cx, cy - 85.f);
 
-        centerRect(_exitBtnBg, cx, cy + 100.f);
-        centerText(_exitText, cx, cy + 95.f);
+        centerRect(_exitBtnBg, cx, cy + 140.f);
+        centerText(_exitText,  cx, cy + 135.f);
 
-        centerText(_bestTimeText, cx, cy + 180.f);
+#ifdef EDITOR_ENABLED
+        centerRect(_editorBtnBg, cx, cy + 30.f);
+        centerText(_editorText,  cx, cy + 25.f);
+#else
+        centerRect(_exitBtnBg, cx, cy + 40.f);
+        centerText(_exitText,  cx, cy + 35.f);
+#endif
+
+        centerText(_bestTimeText, cx, cy + 240.f);
 
         if (_mouseMove->Type() == ActionType::Start) {
             sf::Vector2f mp = static_cast<sf::Vector2f>(_mouseMove->Value2());
@@ -145,6 +168,12 @@ public:
 
             _exitBtnBg.setFillColor(_exitHovered ? sf::Color(200, 70, 70, 255) : sf::Color(50, 50, 50, 220));
             _exitText.setFillColor(_exitHovered ? sf::Color::Yellow : sf::Color::White);
+
+#ifdef EDITOR_ENABLED
+            _editorHovered = _editorBtnBg.getGlobalBounds().contains(mp);
+            _editorBtnBg.setFillColor(_editorHovered ? sf::Color(130, 70, 200, 255) : sf::Color(50, 50, 50, 220));
+            _editorText.setFillColor(_editorHovered ? sf::Color::Yellow : sf::Color::White);
+#endif
         }
 
         if (_mouseClick->Type() == ActionType::End) {
@@ -162,6 +191,19 @@ public:
             } else if (_exitBtnBg.getGlobalBounds().contains(mp)) {
                 gameEngine.Quit();
             }
+#ifdef EDITOR_ENABLED
+            // Передаём колбэк возврата в меню — точно как GameScene
+            else if (_editorBtnBg.getGlobalBounds().contains(mp)) {
+                auto &eng = gameEngine;
+                eng.RequestSceneChange([&eng]() {
+                    eng.LoadScene<EditorScene>(eng, [&eng]() {
+                        eng.RequestSceneChange([&eng]() {
+                            eng.LoadScene<MenuScene>(eng);
+                        });
+                    });
+                });
+            }
+#endif
         }
     }
 
@@ -177,7 +219,12 @@ public:
         window.draw(_exitBtnBg);
         window.draw(_exitText);
         window.draw(_bestTimeText);
+
+#ifdef EDITOR_ENABLED
+        window.draw(_editorBtnBg);
+        window.draw(_editorText);
+#endif
     }
 };
 
-#endif
+#endif // MENUSCENE_H

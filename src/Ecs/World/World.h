@@ -31,7 +31,9 @@ public:
 
     bool IsEntityAlive(int e) const override;
     void EntityComponentsChanged(int e, int storageId, bool added) override;
-
+    int EntityCount() const { return static_cast<int>(_entities.size()); }
+    auto begin() const { return _entities.begin(); }
+    auto end()   const { return _entities.end(); }
     template <typename T>
     std::shared_ptr<ComponentStorage<T>> GetRawStorage()
     {

@@ -8,9 +8,8 @@ enum class ActionType { None, Start, End };
 
 class InputAction {
     std::string _name;
-    ActionType _type;
-
-    short _value;
+    ActionType _type = ActionType::None;
+    short _value = 0;
     sf::Vector2i _value2;
 
 public:

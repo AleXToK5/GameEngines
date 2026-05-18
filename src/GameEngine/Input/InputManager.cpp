@@ -98,6 +98,12 @@ bool InputManager::ProcessInput(const size_t scene) {
                 action->Type() = ActionType::Start;
                 action->Value2() = sf::Vector2i(mouseMoved->position.x, mouseMoved->position.y);
             }
+        } else if (const auto *mouseWheel = event->getIf<sf::Event::MouseWheelScrolled>()) {
+            if (_actionMouseWheelMaps[scene].contains(mouseWheel->wheel)) {
+                auto &action = _actionMouseWheelMaps[scene][mouseWheel->wheel];
+                action->Type() = ActionType::Start;
+                action->Value() = static_cast<short>(mouseWheel->delta > 0 ? 1 : -1);
+            }
         } else if (const auto *closed = event->getIf<sf::Event::Closed>()) {
             _window.close();
             return false;

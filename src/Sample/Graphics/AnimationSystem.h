@@ -30,22 +30,28 @@ public:
         std::vector<int> entitiesToRemove;
 
         for (int e: _filter) {
-            auto &anim = _animators.Get(e);
-            const Animation &animData = _assets.GetAnimation(anim.CurrentAnimation);
+            try {
+                auto &anim = _animators.Get(e);
+                const Animation &animData = _assets.GetAnimation(anim.CurrentAnimation);
 
-            anim.FrameTimer++;
-            if (anim.FrameTimer >= animData.FrameDuration()) {
-                anim.FrameTimer = 0;
+                anim.FrameTimer++;
+                if (anim.FrameTimer >= animData.FrameDuration()) {
+                    anim.FrameTimer = 0;
 
-                if (anim.CurrentFrame + 1 >= animData.FrameCount()) {
-                    if (_world.GetStorage<DestroyAfterAnimationComponent>().Has(e)) {
-                        entitiesToRemove.push_back(e);
+                    if (anim.CurrentFrame + 1 >= animData.FrameCount()) {
+                        if (_world.GetStorage<DestroyAfterAnimationComponent>().Has(e)) {
+                            entitiesToRemove.push_back(e);
+                        } else {
+                            anim.CurrentFrame = 0;
+                        }
                     } else {
-                        anim.CurrentFrame = 0;
+                        anim.CurrentFrame++;
                     }
-                } else {
-                    anim.CurrentFrame++;
                 }
+            }
+            catch (const std::exception& ex) {
+                std::cerr << "[AnimationSystem] Entity " << e
+                          << " error: " << ex.what() << std::endl;
             }
         }
 
