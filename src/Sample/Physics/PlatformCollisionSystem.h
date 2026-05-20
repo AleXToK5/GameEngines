@@ -16,6 +16,7 @@
 #include "../Graphics/SpriteComponent.h"
 #include "../Gameplay/Weapons/ProjectileComponent.h"
 #include "../Gameplay/Environment/FinishComponent.h"
+#include "../Gameplay/Environment/GoombaComponent.h"
 
 class PlatformCollisionSystem final : public ISystem {
     World &_world;
@@ -60,9 +61,7 @@ public:
             dynT.X += dynV.X;
 
             for (int statEnt: _staticFilter) {
-                if (dynEnt == statEnt) continue;
-                if (_velocities.Has(statEnt)) continue;
-
+                if (dynEnt == statEnt || _velocities.Has(statEnt)) continue;
                 if (isProjectile && _world.GetStorage<FinishComponent>().Has(statEnt)) continue;
                 if (isPlayer && _world.GetStorage<FinishComponent>().Has(statEnt)) continue;
                 if (entitiesToRemove.contains(statEnt) || entitiesToRemove.contains(dynEnt)) continue;
@@ -70,15 +69,10 @@ public:
                 auto &statC = _colliders.Get(statEnt);
                 auto &statT = _transforms.Get(statEnt);
 
-                float dynHalfW = dynC.Size.x / 2.f;
-                float dynHalfH = dynC.Size.y / 2.f;
-                float statHalfW = statC.Size.x / 2.f;
-                float statHalfH = statC.Size.y / 2.f;
-
                 float dx = dynT.X - statT.X;
                 float dy = dynT.Y - statT.Y;
-                float intersectX = std::abs(dx) - (dynHalfW + statHalfW);
-                float intersectY = std::abs(dy) - (dynHalfH + statHalfH);
+                float intersectX = std::abs(dx) - (dynC.Size.x / 2.f + statC.Size.x / 2.f);
+                float intersectY = std::abs(dy) - (dynC.Size.y / 2.f + statC.Size.y / 2.f);
 
                 if (intersectX < 0.f && intersectY < 0.f) {
                     if (isProjectile) {
@@ -138,6 +132,59 @@ public:
 
                     if (isPlayer && _world.GetStorage<FinishComponent>().Has(statEnt)) {
                         _players.Get(dynEnt).IsFinished = true;
+                    }
+                }
+            }
+        }
+
+        std::vector<int> dynamics;
+        for (int e: _dynamicFilter) {
+            dynamics.push_back(e);
+        }
+
+        for (size_t i = 0; i < dynamics.size(); ++i) {
+            int e1 = dynamics[i];
+            if (entitiesToRemove.contains(e1)) continue;
+
+            for (size_t j = i + 1; j < dynamics.size(); ++j) {
+                int e2 = dynamics[j];
+                if (entitiesToRemove.contains(e2)) continue;
+
+                auto &c1 = _colliders.Get(e1);
+                auto &c2 = _colliders.Get(e2);
+                auto &t1 = _transforms.Get(e1);
+                auto &t2 = _transforms.Get(e2);
+
+                float dx = t1.X - t2.X;
+                float dy = t1.Y - t2.Y;
+                float intersectX = std::abs(dx) - (c1.Size.x / 2.f + c2.Size.x / 2.f);
+                float intersectY = std::abs(dy) - (c1.Size.y / 2.f + c2.Size.y / 2.f);
+
+                if (intersectX < 0.f && intersectY < 0.f) {
+                    bool e1IsPlayer = _players.Has(e1);
+                    bool e2IsPlayer = _players.Has(e2);
+                    bool e1IsGoomba = _world.GetStorage<GoombaComponent>().Has(e1);
+                    bool e2IsGoomba = _world.GetStorage<GoombaComponent>().Has(e2);
+                    bool e1IsProj = _world.GetStorage<ProjectileComponent>().Has(e1);
+                    bool e2IsProj = _world.GetStorage<ProjectileComponent>().Has(e2);
+
+                    if ((e1IsPlayer && e2IsGoomba) || (e2IsPlayer && e1IsGoomba)) {
+                        int playerEnt = e1IsPlayer ? e1 : e2;
+                        auto &t = _transforms.Get(playerEnt);
+                        auto &p = _players.Get(playerEnt);
+                        auto &v = _velocities.Get(playerEnt);
+
+                        t.X = p.SpawnX;
+                        t.Y = p.SpawnY;
+                        v.X = 0;
+                        v.Y = 0;
+                    } else if ((e1IsProj && e2IsGoomba) || (e2IsProj && e1IsGoomba)) {
+                        int projEnt = e1IsProj ? e1 : e2;
+                        int goombaEnt = e1IsGoomba ? e1 : e2;
+                        entitiesToRemove.insert(projEnt);
+                        entitiesToRemove.insert(goombaEnt);
+
+                        explosionsToCreate.push_back({_transforms.Get(goombaEnt).X, _transforms.Get(goombaEnt).Y});
                     }
                 }
             }

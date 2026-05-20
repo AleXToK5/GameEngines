@@ -79,6 +79,10 @@
     {
       "name": "MegaShootJump",
       "path": "src/Assets/Animations/MegaShootJump.png"
+    },
+    {
+      "name": "GoombaMoveTex",
+      "path": "src/Assets/Animations/GoombaMove.png"
     }
   ],
   "Animations": [
@@ -123,6 +127,12 @@
       "textureName": "MegaShootJump",
       "frameCount": 1,
       "frameDuration": 100
+    },
+    {
+      "name": "GoombaWalkAnim",
+      "textureName": "GoombaMoveTex",
+      "frameCount": 3,
+      "frameDuration": 15
     }
   ],
   "Fonts": [
