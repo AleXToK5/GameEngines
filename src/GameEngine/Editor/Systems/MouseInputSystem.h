@@ -22,8 +22,8 @@ class EditorMouseInputSystem final : public ISystem {
 
     bool _lmbWasDown  = false;
     bool _rmbWasDown  = false;
-    bool _copyWasDown  = false; // для однократного срабатывания Ctrl+C
-    bool _pasteWasDown = false; // для однократного срабатывания Ctrl+V
+    bool _copyWasDown  = false;
+    bool _pasteWasDown = false;
 
 public:
     EditorMouseInputSystem(World& world,
@@ -45,13 +45,11 @@ public:
         sf::Vector2i mousePixel = _move->Value2();
         ImGuiIO& io = ImGui::GetIO();
 
-        // --- Зум ---
         if (_wheel->Type() == ActionType::Start) {
             CameraService::ApplyZoom(_state, static_cast<float>(_wheel->Value()));
             _wheel->Type() = ActionType::None;
         }
 
-        // --- Pan средней кнопкой ---
         if (_mmb->Type() == ActionType::Start && !_state.IsPanning)
             CameraService::BeginPan(_state, mousePixel);
         if (_state.IsPanning)
@@ -67,7 +65,6 @@ public:
         bool ctrlHeld = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) ||
                         sf::Keyboard::isKeyPressed(sf::Keyboard::Key::RControl);
 
-        // --- Ctrl+C / Ctrl+V — только в момент нажатия, не каждый кадр ---
         bool copyDown  = ctrlHeld && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C);
         bool pasteDown = ctrlHeld && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::V);
 
@@ -80,29 +77,23 @@ public:
         _copyWasDown  = copyDown;
         _pasteWasDown = pasteDown;
 
-        // --- ЛКМ ---
         if (lmbJustPressed && !io.WantCaptureMouse) {
             if (!_state.SelectedObject.empty() && _state.HeldEntity == -1) {
-                // Drag из ImageButton — создаём объект прямо под курсором
                 sf::Vector2f wp = CameraService::ScreenToWorld(_window, mousePixel, _state);
                 int newEnt = GameObjectFactory::Create(world, _state.SelectedObject, wp.x, wp.y);
                 if (newEnt != -1)
                     _controller.BeginDragNew(_state, newEnt, _window, mousePixel);
             } else {
-                // Подбираем существующий объект (с учётом Ctrl)
                 _controller.TryPickUp(_state, _window, mousePixel, ctrlHeld);
             }
         }
 
-        // Тянем удерживаемый объект
         if (lmbDown && _state.HeldEntity != -1)
             _controller.MoveHeld(_state, _window, mousePixel);
 
-        // Отпускаем
         if (lmbJustReleased)
             _controller.Drop(_state);
-
-        // --- ПКМ: удалить ---
+        
         bool rmbDown        = (_rmb->Type() == ActionType::Start);
         bool rmbJustPressed = rmbDown && !_rmbWasDown;
         _rmbWasDown = rmbDown;

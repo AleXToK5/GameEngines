@@ -10,7 +10,6 @@ namespace EditorConstants {
     constexpr float ZoomMax  = 4.f;
     constexpr float ZoomStep = 0.1f;
 
-    // Объекты, доступные для размещения, и их текстуры
     inline const std::vector<std::string> PlaceableObjects = {
         "Player", "Tile", "Brick", "BigHill", "Cloud", "Finish"
     };
@@ -24,7 +23,6 @@ namespace EditorConstants {
         {"Finish",  "Finish"},
     };
 
-    // По текстуре определяем тип объекта для сохранения в level.json
     inline std::string TextureToObjectName(const std::string& texName) {
         for (const auto& [obj, tex] : ObjectTextures) {
             if (tex == texName) return obj;
@@ -32,4 +30,4 @@ namespace EditorConstants {
         return "";
     }
 
-} // namespace EditorConstants
+}

@@ -17,10 +17,6 @@ public:
     GameObjectController(World& world, float windowHeight)
         : _world(world), _windowHeight(windowHeight) {}
 
-    // Попытка подобрать объект под курсором.
-    // Если клик по уже выделенному — начинаем двигать всю группу.
-    // Если Ctrl зажат — добавляем к выделению.
-    // Возвращает true если что-то схвачено.
     bool TryPickUp(RenderState& state,
                    const sf::RenderWindow& window,
                    const sf::Vector2i& mousePixel,
@@ -42,28 +38,24 @@ public:
         }
 
         if (picked == -1) {
-            // Клик в пустое место без Ctrl — снимаем выделение
             if (!ctrlHeld) state.Selection.clear();
             return false;
         }
 
         if (ctrlHeld) {
-            // Ctrl+клик: переключаем выделение
             if (state.Selection.count(picked))
                 state.Selection.erase(picked);
             else
                 state.Selection.insert(picked);
-            return false; // не начинаем drag сразу
+            return false;
         }
 
-        // Если кликнули по невыделенному — снимаем старое выделение
         if (!state.Selection.count(picked))
             state.Selection.clear();
 
         state.Selection.insert(picked);
         state.HeldEntity = picked;
 
-        // Сохраняем смещение курсора от позиции каждого выделенного entity
         state.SelectionOffsets.clear();
         for (int sel : state.Selection) {
             if (!_world.IsEntityAlive(sel) || !transforms.Has(sel)) continue;
@@ -74,7 +66,6 @@ public:
         return true;
     }
 
-    // Начать drag новосозданного объекта (из ImageButton)
     void BeginDragNew(RenderState& state, int entityId,
                       const sf::RenderWindow& window,
                       const sf::Vector2i& mousePixel) {
@@ -82,19 +73,16 @@ public:
         state.Selection.insert(entityId);
         state.HeldEntity = entityId;
 
-        // Смещение = 0, т.к. объект создаётся прямо под курсором
         sf::Vector2f worldPos = CameraService::ScreenToWorld(window, mousePixel, state);
         state.SelectionOffsets.clear();
         state.SelectionOffsets[entityId] = {0.f, 0.f};
 
-        // Ставим объект сразу под курсор (привязка к сетке)
         auto& t = _world.GetStorage<TransformComponent>().Get(entityId);
         sf::Vector2f snapped = SnapToGrid(worldPos);
         t.X = snapped.x;
         t.Y = snapped.y;
     }
 
-    // Перемещение всех удерживаемых объектов
     void MoveHeld(RenderState& state,
                   const sf::RenderWindow& window,
                   const sf::Vector2i& mousePixel) {
@@ -118,11 +106,9 @@ public:
         state.SelectedObject = "";
     }
 
-    // Удалить объект под курсором или все выделенные
     void TryDelete(const sf::RenderWindow& window,
                    const sf::Vector2i& mousePixel,
                    RenderState& state) {
-        // Если есть выделение — удаляем его
         if (!state.Selection.empty()) {
             for (int id : state.Selection) {
                 if (_world.IsEntityAlive(id))
@@ -132,7 +118,6 @@ public:
             return;
         }
 
-        // Иначе удаляем объект под курсором
         sf::Vector2f worldPos = CameraService::ScreenToWorld(window, mousePixel, state);
         auto& transforms = _world.GetStorage<TransformComponent>();
         float best = EditorConstants::TileSize * 0.75f;
@@ -150,14 +135,12 @@ public:
         if (toDelete != -1) _world.RemoveEntity(toDelete);
     }
 
-    // Ctrl+C: копируем выделенные объекты в буфер
     void Copy(RenderState& state) {
         if (state.Selection.empty()) return;
 
         auto& transforms = _world.GetStorage<TransformComponent>();
         auto& sprites    = _world.GetStorage<SpriteComponent>();
 
-        // Считаем общий центр группы
         sf::Vector2f center{0.f, 0.f};
         int count = 0;
         for (int id : state.Selection) {
@@ -186,7 +169,6 @@ public:
         }
     }
 
-    // Ctrl+V: вставляем из буфера под курсор
     void Paste(RenderState& state,
                const sf::RenderWindow& window,
                const sf::Vector2i& mousePixel) {

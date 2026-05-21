@@ -29,13 +29,11 @@ set(SOURCES main.cpp
         Sample/Level/LevelInitializer.h
         Sample/Gameplay/PlayerTag.h
         Sample/Physics/TransformComponent.h
-        GameEngine/Serialization/ComponentSerializer.cpp
         GameEngine/Serialization/ComponentSerializer.h
         GameEngine/Serialization/ComponentSerializerFuncs.h
         GameEngine/Serialization/ComponentsMetadata.h
         GameEngine/Serialization/IComponentSerializer.h
         GameEngine/Serialization/SerializedEntity.h
-        GameEngine/Editor/EditorScene.cpp
         GameEngine/Editor/EditorScene.h
         GameEngine/Editor/CameraService.h
         GameEngine/Editor/Constants.h
@@ -44,15 +42,10 @@ set(SOURCES main.cpp
         GameEngine/Editor/JsonSerializer.h
         GameEngine/Editor/RenderService.h
         GameEngine/Editor/RenderState.h
-        GameEngine/Editor/Systems/EntityGuiSystem.cpp
         GameEngine/Editor/Systems/EntityGuiSystem.h
-        GameEngine/Editor/Systems/GuiSystem.cpp
         GameEngine/Editor/Systems/GuiSystem.h
-        GameEngine/Editor/Systems/InputSystem.cpp
         GameEngine/Editor/Systems/InputSystem.h
-        GameEngine/Editor/Systems/MouseInputSystem.cpp
         GameEngine/Editor/Systems/MouseInputSystem.h
-        GameEngine/Editor/Systems/RenderSystem.cpp
         GameEngine/Editor/Systems/RenderSystem.h
 )
 

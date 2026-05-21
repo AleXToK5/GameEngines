@@ -88,7 +88,6 @@ public:
         return j;
     }
 
-    // Используем EntityCount() — нужно добавить в World.h (см. ниже)
     json SerializeWorld() const {
         json j;
         for (int id = 0; id < _world.EntityCount(); id++) {

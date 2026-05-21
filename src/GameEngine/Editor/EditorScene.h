@@ -23,7 +23,7 @@
 class EditorScene final : public Scene {
     static constexpr sf::Color BgColor{0x55, 0x55, 0xAA, 0xFF};
 
-    std::function<void()> _onQuit; // колбэк выхода — как в GameScene
+    std::function<void()> _onQuit;
 
     RenderState _state;
     GameObjectController _controller;
@@ -44,10 +44,9 @@ public:
     void Init() override {
         _state.CameraCenter = {_windowWidth / 2.f, _windowHeight / 2.f};
 
-        // false = без смещения финиша в редакторе
         systemsManager.AddInitializer(std::make_shared<LevelInitializer>(
             world, "level.json", "config.json",
-            gameEngine.Assets(), _windowHeight, false));
+            gameEngine.Assets(), _windowHeight, true));
 
         RegisterAction(sf::Keyboard::Key::Left,    "CamLeft");
         RegisterAction(sf::Keyboard::Key::Right,   "CamRight");
@@ -89,7 +88,6 @@ public:
     }
 
     void Update(float delta) override {
-        // Выход по Escape — вызываем колбэк как GameScene
         if (actionMap.count("Escape") && actionMap["Escape"]->Type() == ActionType::Start) {
             actionMap["Escape"]->Type() = ActionType::None;
             if (_onQuit) _onQuit();
@@ -111,4 +109,4 @@ public:
     }
 };
 
-#endif // EDITOR_ENABLED
+#endif

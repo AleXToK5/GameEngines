@@ -47,7 +47,6 @@ public:
             const auto& s = _sprites.Get(e);
             if (s.TextureName.empty()) continue;
 
-            // Цвет: жёлтый — удерживается, голубой — выделен, белый — обычный
             sf::Color tint = sf::Color::White;
             if (e == _state.HeldEntity)
                 tint = sf::Color(255, 255, 100, 220);
@@ -76,7 +75,6 @@ public:
                     _window.draw(sprite);
                 }
 
-                // Рамка вокруг выделенных
                 if (_state.Selection.count(e)) {
                     sf::RectangleShape outline;
                     float hw = EditorConstants::TileSize / 2.f;

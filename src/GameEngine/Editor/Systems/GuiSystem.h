@@ -35,7 +35,6 @@ public:
             try {
                 tex = &_assets.GetTexture(texIt->second);
             } catch (...) {
-                // Текстура не загружена — текстовая кнопка
                 bool selected = (_state.SelectedObject == objName);
                 if (selected) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.7f, 0.3f, 1.f));
                 if (ImGui::Button(objName.c_str(), {130.f, 30.f}))
@@ -45,7 +44,6 @@ public:
                 continue;
             }
 
-            // Масштабируем спрайт по большей стороне (как в лекции)
             sf::Sprite sprite(*tex);
             float scale = std::min(
                 BtnSize / static_cast<float>(tex->getSize().x),
@@ -54,14 +52,12 @@ public:
             sprite.setScale({scale, scale});
             const auto& size = sprite.getGlobalBounds().size;
 
-            // Подсветка выбранного
             bool selected = (_state.SelectedObject == objName);
             if (selected) {
                 ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.3f, 0.7f, 0.3f, 1.f));
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.8f, 0.4f, 1.f));
             }
 
-            // Добавляем padding чтобы кнопка была квадратной (как в лекции)
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(
                 (BtnSize - size.x) / 2.f + 3.f,
                 (BtnSize - size.y) / 2.f + 3.f
@@ -76,7 +72,6 @@ public:
 
             if (selected) ImGui::PopStyleColor(2);
 
-            // Подпись по центру
             float textW = ImGui::CalcTextSize(objName.c_str()).x;
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (130.f - textW) / 2.f);
             ImGui::Text("%s", objName.c_str());

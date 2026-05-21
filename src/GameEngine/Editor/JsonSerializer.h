@@ -13,7 +13,6 @@ using json = nlohmann::json;
 
 class JsonSerializer {
 public:
-    // Сохраняет все entity со SpriteComponent и TransformComponent в level.json
     static void SaveLevel(const std::string& path, World& world, float windowHeight) {
         auto& transforms = world.GetStorage<TransformComponent>();
         auto& sprites    = world.GetStorage<SpriteComponent>();
@@ -30,7 +29,6 @@ public:
             std::string objName = EditorConstants::TextureToObjectName(s.TextureName);
             if (objName.empty()) continue;
 
-            // Мировые координаты → тайловые (с учётом инверсии Y как в LevelInitializer)
             int tileX = static_cast<int>((t.X - EditorConstants::TileSize / 2.f) / EditorConstants::TileSize);
             int tileY = static_cast<int>((windowHeight - t.Y - EditorConstants::TileSize / 2.f) / EditorConstants::TileSize);
 

@@ -8,7 +8,6 @@
 
 class RenderService {
 public:
-    // Рисует сетку в мировых координатах
     static void DrawGrid(sf::RenderWindow& window, const RenderState& state) {
         sf::View view = CameraService::BuildView(window, state);
         window.setView(view);
@@ -40,7 +39,6 @@ public:
         }
     }
 
-    // Рисует полупрозрачный превью выбранного тайла под курсором
     static void DrawPreview(sf::RenderWindow& window,
                             const RenderState& state,
                             const AssetManager& assets,

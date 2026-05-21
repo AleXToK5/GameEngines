@@ -3,7 +3,6 @@
 #include "ComponentsMetadata.h"
 #include "SerializedEntity.h"
 
-// Обходит все поля зарегистрированного компонента
 template <typename T, typename Func>
 void ForEachField(Func&& func) {
     std::apply([&](auto&&... field) {
@@ -11,7 +10,6 @@ void ForEachField(Func&& func) {
     }, StructTraits<T>::fields);
 }
 
-// Сериализует компонент в SerializedComponent
 template <typename T>
 void SerializeComponent(const T& component, SerializedComponent& out) {
     out.Type = typeid(T);
@@ -24,7 +22,6 @@ void SerializeComponent(const T& component, SerializedComponent& out) {
     });
 }
 
-// Десериализует SerializedComponent в компонент
 template <typename T>
 void DeserializeComponent(const SerializedComponent& in, T& component) {
     for (const auto& field : in.Fields) {
