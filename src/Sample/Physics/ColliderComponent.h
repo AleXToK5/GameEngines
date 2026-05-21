@@ -10,7 +10,7 @@ enum CollisionLayer : uint16_t {
     None = 0,
     Player = 1 << 0,
     Projectile = 1 << 1,
-    Asteroid = 1 << 2,
+    Tile = 1 << 2,
     Enemy = 1 << 3
 };
 

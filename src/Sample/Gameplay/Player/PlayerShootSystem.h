@@ -62,7 +62,7 @@ public:
                 _world.GetStorage<ColliderComponent>().Add(bullet, {
                                                                ColliderType::Circle, autoRadius, {0.0f, 0.0f},
                                                                Projectile,
-                                                               static_cast<uint16_t>(Asteroid)
+                                                               static_cast<uint16_t>(Tile)
                                                            });
 
                 player.ShootCooldown = player.MaxCooldown;

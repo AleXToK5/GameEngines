@@ -14,6 +14,7 @@
 #include "../../Sample/Gameplay/Player/PlayerStateSystem.h"
 #include "../../Sample/Graphics/AnimationSystem.h"
 #include "../../Sample/Gameplay/Player/PlayerShootSystem.h"
+#include "../../Sample/Gameplay/Environment/AiSystem.h"
 
 class GameScene final : public Scene {
     static constexpr sf::Color BackgroundColor{0x64, 0x64, 0xff, 0xff};
@@ -46,6 +47,7 @@ public:
         RegisterAction(sf::Keyboard::Key::P, "Pause");
 
         systemsManager.AddSystem(std::make_shared<PlayerShootSystem>(world, gameEngine.Assets(), actionMap["Shoot"]));
+        systemsManager.AddSystem(std::make_shared<AiSystem>(world));
         systemsManager.AddSystem(
             std::make_shared<MovementSystem>(world, actionMap["MoveLeft"], actionMap["MoveRight"], actionMap["Jump"]));
         systemsManager.AddSystem(std::make_shared<PlatformCollisionSystem>(world));

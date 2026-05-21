@@ -97,12 +97,12 @@ public:
                     world.GetStorage<GravityComponent>().Add(e, {pData["GY"], pData["SM"]});
                     world.GetStorage<ColliderComponent>().Add(e, {
                                                                   ColliderType::AABB, 0.f, {bboxW, bboxH},
-                                                                  Player, static_cast<uint16_t>(Asteroid)
+                                                                  Player, static_cast<uint16_t>(Tile)
                                                               });
                 }
             } else if (name == "Goomba") {
-                world.GetStorage<SpriteComponent>().Add(e, {"GoombaMoveTex"});
-                world.GetStorage<AnimatorComponent>().Add(e, {"GoombaWalkAnim", 0, 0});
+                world.GetStorage<SpriteComponent>().Add(e, {"GoombaIdle"});
+                world.GetStorage<AnimatorComponent>().Add(e, {"GoombaIdleAnim", 0, 0});
 
                 if (configData.contains("Goomba")) {
                     auto &gData = configData["Goomba"];
@@ -118,14 +118,14 @@ public:
                     float pLeft = obj.value("patrolLeft", gridX - 2) * TileSize;
                     float pRight = obj.value("patrolRight", gridX + 2) * TileSize + TileSize;
 
-                    world.GetStorage<GoombaComponent>().Add(e, {GoombaState::Patrol, pLeft, pRight, speed, -1});
+                    world.GetStorage<GoombaComponent>().Add(e, {GoombaState::Idle, pLeft, pRight, speed, -1, 1.0f});
                     world.GetStorage<VelocityComponent>().Add(e, {0.f, 0.f});
                     world.GetStorage<GravityComponent>().Add(e, {gData["GY"], gData["SM"]});
 
                     world.GetStorage<ColliderComponent>().Add(e, {
                                                                   ColliderType::AABB, 0.f, {bboxW, bboxH},
                                                                   Enemy,
-                                                                  static_cast<uint16_t>(Asteroid | Player | Projectile)
+                                                                  static_cast<uint16_t>(Tile | Player | Projectile)
                                                               });
                 }
             } else if (name == "Tile" || name == "Brick" || name == "Finish") {
@@ -142,13 +142,13 @@ public:
 
                     world.GetStorage<ColliderComponent>().Add(e, {
                                                                   ColliderType::AABB, 0.f, {TileSize, finishHeight},
-                                                                  Asteroid, static_cast<uint16_t>(Player)
+                                                                  Tile, static_cast<uint16_t>(Player)
                                                               });
                     world.GetStorage<FinishComponent>().Add(e, {});
                 } else {
                     world.GetStorage<ColliderComponent>().Add(e, {
                                                                   ColliderType::AABB, 0.f, {TileSize, TileSize},
-                                                                  Asteroid, static_cast<uint16_t>(Player | Projectile)
+                                                                  Tile, static_cast<uint16_t>(Player | Projectile)
                                                               });
                     if (name == "Brick") world.GetStorage<BrickComponent>().Add(e, {});
                 }

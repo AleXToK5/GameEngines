@@ -81,6 +81,10 @@
       "path": "src/Assets/Animations/MegaShootJump.png"
     },
     {
+      "name": "GoombaIdle",
+      "path": "src/Assets/Textures/GoombaIdle.png"
+    },
+    {
       "name": "GoombaMoveTex",
       "path": "src/Assets/Animations/GoombaMove.png"
     }
@@ -133,6 +137,12 @@
       "textureName": "GoombaMoveTex",
       "frameCount": 3,
       "frameDuration": 15
+    },
+    {
+      "name": "GoombaIdleAnim",
+      "textureName": "GoombaIdle",
+      "frameCount": 1,
+      "frameDuration": 60
     }
   ],
   "Fonts": [
