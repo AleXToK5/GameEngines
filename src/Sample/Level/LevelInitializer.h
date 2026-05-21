@@ -20,14 +20,16 @@
 #include "../Gameplay/Environment/FinishComponent.h"
 #include "../Gameplay/Environment/DecorComponent.h"
 #include "../Graphics/AnimatorComponent.h"
+#include "../Gameplay/Environment/GoombaComponent.h"
 
 static const std::unordered_map<std::string, std::string> LevelObjectTextures = {
     {"Player", "MegaIdle"},
-    {"Tile",   "Tile"},
-    {"Brick",  "Brick Tile"},
-    {"BigHill","BigHill"},
+    {"Tile", "Tile"},
+    {"Brick", "Brick Tile"},
+    {"BigHill", "BigHill"},
     {"Finish", "Finish"},
-    {"Cloud",  "Cloud"},
+    {"Cloud", "Cloud"},
+    {"Goomba", "Goomba"},
 };
 
 class LevelInitializer final : public IInitializer {
@@ -35,7 +37,7 @@ class LevelInitializer final : public IInitializer {
     std::string _configFile;
     const AssetManager &_assets;
     float _windowHeight;
-    bool _applyFinishOffset; // ← добавлено поле
+    bool _applyFinishOffset;
 
     static constexpr float TileSize = 64.f;
 
@@ -44,7 +46,8 @@ public:
                      const AssetManager &assets, float windowHeight, bool applyFinishOffset = true)
         : IInitializer(world), _levelFile(levelFile), _configFile(configFile),
           _assets(assets), _windowHeight(windowHeight),
-          _applyFinishOffset(applyFinishOffset) {} // ← сохраняем
+          _applyFinishOffset(applyFinishOffset) {
+    }
 
     void OnInit() override {
         std::ifstream confFile(_configFile);
@@ -87,14 +90,43 @@ public:
                     t.ScaleY = scale;
 
                     world.GetStorage<PlayerComponent>().Add(e, {
-                        pData["SX"], pData["JY"], pData["SM"], false, 0, 20, false, px, py
-                    });
+                                                                pData["SX"], pData["JY"], pData["SM"], false, 0, 20,
+                                                                false, px, py
+                                                            });
                     world.GetStorage<VelocityComponent>().Add(e, {0.f, 0.f});
                     world.GetStorage<GravityComponent>().Add(e, {pData["GY"], pData["SM"]});
                     world.GetStorage<ColliderComponent>().Add(e, {
-                        ColliderType::AABB, 0.f, {bboxW, bboxH},
-                        Player, static_cast<uint16_t>(Asteroid)
-                    });
+                                                                  ColliderType::AABB, 0.f, {bboxW, bboxH},
+                                                                  Player, static_cast<uint16_t>(Asteroid)
+                                                              });
+                }
+            } else if (name == "Goomba") {
+                world.GetStorage<SpriteComponent>().Add(e, {"GoombaMoveTex"});
+                world.GetStorage<AnimatorComponent>().Add(e, {"GoombaWalkAnim", 0, 0});
+
+                if (configData.contains("Goomba")) {
+                    auto &gData = configData["Goomba"];
+                    float bboxW = gData["Bbox"][0];
+                    float bboxH = gData["Bbox"][1];
+                    float speed = gData.value("Speed", 3.0f);
+
+                    float scale = gData.value("Scale", 2.0f);
+                    auto &t = world.GetStorage<TransformComponent>().Get(e);
+                    t.ScaleX = scale;
+                    t.ScaleY = scale;
+
+                    float pLeft = obj.value("patrolLeft", gridX - 2) * TileSize;
+                    float pRight = obj.value("patrolRight", gridX + 2) * TileSize + TileSize;
+
+                    world.GetStorage<GoombaComponent>().Add(e, {GoombaState::Patrol, pLeft, pRight, speed, -1});
+                    world.GetStorage<VelocityComponent>().Add(e, {0.f, 0.f});
+                    world.GetStorage<GravityComponent>().Add(e, {gData["GY"], gData["SM"]});
+
+                    world.GetStorage<ColliderComponent>().Add(e, {
+                                                                  ColliderType::AABB, 0.f, {bboxW, bboxH},
+                                                                  Enemy,
+                                                                  static_cast<uint16_t>(Asteroid | Player | Projectile)
+                                                              });
                 }
             } else if (name == "Tile" || name == "Brick" || name == "Finish") {
                 world.GetStorage<SpriteComponent>().Add(e, {it->second});
@@ -109,15 +141,15 @@ public:
                     }
 
                     world.GetStorage<ColliderComponent>().Add(e, {
-                        ColliderType::AABB, 0.f, {TileSize, finishHeight},
-                        Asteroid, static_cast<uint16_t>(Player)
-                    });
+                                                                  ColliderType::AABB, 0.f, {TileSize, finishHeight},
+                                                                  Asteroid, static_cast<uint16_t>(Player)
+                                                              });
                     world.GetStorage<FinishComponent>().Add(e, {});
                 } else {
                     world.GetStorage<ColliderComponent>().Add(e, {
-                        ColliderType::AABB, 0.f, {TileSize, TileSize},
-                        Asteroid, static_cast<uint16_t>(Player | Projectile)
-                    });
+                                                                  ColliderType::AABB, 0.f, {TileSize, TileSize},
+                                                                  Asteroid, static_cast<uint16_t>(Player | Projectile)
+                                                              });
                     if (name == "Brick") world.GetStorage<BrickComponent>().Add(e, {});
                 }
             } else if (name == "BigHill" || name == "Cloud") {

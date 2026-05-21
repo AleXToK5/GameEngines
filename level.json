@@ -5,6 +5,13 @@
     "y": 3
   },
   {
+    "name": "Goomba",
+    "x": 13,
+    "y": 3,
+    "patrolLeft": 11,
+    "patrolRight": 15
+  },
+  {
     "name": "Tile",
     "x": 0,
     "y": 0

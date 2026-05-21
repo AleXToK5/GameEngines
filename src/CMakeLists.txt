@@ -1,7 +1,5 @@
 set(TARGET_NAME main)
 set(SOURCES main.cpp
-        ConfigReader.cpp
-        ConfigReader.h
         Sample/Physics/MovementSystem.h
         Sample/Physics/MovementComponent.h
         Sample/UI/UiSystem.cpp
