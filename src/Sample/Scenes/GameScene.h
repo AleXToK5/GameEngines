@@ -47,7 +47,8 @@ public:
         RegisterAction(sf::Keyboard::Key::P, "Pause");
 
         systemsManager.AddSystem(std::make_shared<PlayerShootSystem>(world, gameEngine.Assets(), actionMap["Shoot"]));
-        systemsManager.AddSystem(std::make_shared<AiSystem>(world));
+        systemsManager.
+                AddSystem(std::make_shared<AiSystem>(world, static_cast<float>(gameEngine.Window().getSize().y)));
         systemsManager.AddSystem(
             std::make_shared<MovementSystem>(world, actionMap["MoveLeft"], actionMap["MoveRight"], actionMap["Jump"]));
         systemsManager.AddSystem(std::make_shared<PlatformCollisionSystem>(world));

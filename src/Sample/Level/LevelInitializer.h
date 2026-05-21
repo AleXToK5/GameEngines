@@ -115,10 +115,13 @@ public:
                     t.ScaleX = scale;
                     t.ScaleY = scale;
 
-                    float pLeft = obj.value("patrolLeft", gridX - 2) * TileSize;
-                    float pRight = obj.value("patrolRight", gridX + 2) * TileSize + TileSize;
+                    float leftTile = obj.value("patrolLeft", gridX - 2);
+                    float rightTile = obj.value("patrolRight", gridX + 2);
 
-                    world.GetStorage<GoombaComponent>().Add(e, {GoombaState::Idle, pLeft, pRight, speed, -1, 1.0f});
+                    float pLeft = leftTile * TileSize + TileSize / 2.f;
+                    float pRight = rightTile * TileSize + TileSize / 2.f;
+
+                    world.GetStorage<GoombaComponent>().Add(e, {GoombaState::Patrol, pLeft, pRight, speed, -1});
                     world.GetStorage<VelocityComponent>().Add(e, {0.f, 0.f});
                     world.GetStorage<GravityComponent>().Add(e, {gData["GY"], gData["SM"]});
 
