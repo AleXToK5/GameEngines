@@ -8,9 +8,8 @@
 #include "../../Sample/Physics/TransformComponent.h"
 #include "../../Sample/Graphics/SpriteComponent.h"
 #include "../../Sample/Gameplay/Environment/GoombaComponent.h"
+#include "../../Sample/Gameplay/PlayerTag.h"
 #include "Constants.h"
-
-using json = nlohmann::json;
 
 class JsonSerializer {
 public:
@@ -18,8 +17,9 @@ public:
         auto &transforms = world.GetStorage<TransformComponent>();
         auto &sprites = world.GetStorage<SpriteComponent>();
         auto &goombas = world.GetStorage<GoombaComponent>();
+        auto &players = world.GetStorage<PlayerTag>();
 
-        json arr = json::array();
+        nlohmann::ordered_json arr = nlohmann::ordered_json::array();
 
         for (int id = 0; id < world.EntityCount(); id++) {
             if (!world.IsEntityAlive(id)) continue;
@@ -28,14 +28,25 @@ public:
             const auto &t = transforms.Get(id);
             const auto &s = sprites.Get(id);
 
-            std::string objName = EditorConstants::TextureToObjectName(s.TextureName);
+            std::string objName = "";
+            if (goombas.Has(id)) {
+                objName = "Goomba";
+            } else if (players.Has(id)) {
+                objName = "Player";
+            } else {
+                objName = EditorConstants::TextureToObjectName(s.TextureName);
+            }
+
             if (objName.empty()) continue;
 
             int tileX = static_cast<int>((t.X - EditorConstants::TileSize / 2.f) / EditorConstants::TileSize);
             int tileY = static_cast<int>((windowHeight - t.Y - EditorConstants::TileSize / 2.f) /
                                          EditorConstants::TileSize);
 
-            json objJson = {{"name", objName}, {"x", tileX}, {"y", tileY}};
+            nlohmann::ordered_json objJson;
+            objJson["name"] = objName;
+            objJson["x"] = tileX;
+            objJson["y"] = tileY;
 
             if (goombas.Has(id)) {
                 const auto &g = goombas.Get(id);
